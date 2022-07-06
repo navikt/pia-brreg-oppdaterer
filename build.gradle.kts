@@ -15,6 +15,7 @@ val kotlinx_serialization_json_version: String by project
 val kotlinx_datetime_version: String by project
 val junit_version: String by project
 val ktor_version: String by project
+val testcontainers_version: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -25,9 +26,16 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    implementation("org.apache.kafka:kafka-clients:3.1.0")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.2")
+
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3")
+    testImplementation("org.testcontainers:testcontainers:$testcontainers_version")
+    testImplementation("org.testcontainers:kafka:$testcontainers_version")
 }
 
 tasks.test {

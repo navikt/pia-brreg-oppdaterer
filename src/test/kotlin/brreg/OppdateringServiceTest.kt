@@ -246,6 +246,6 @@ internal class OppdateringServiceTest {
 
     @Test
     fun oppdater() = runTest {
-        OppdateringService(mockClient).oppdater()
+        OppdateringService(mockClient, KafkaProdusent(KafkaContainerHelper.kafkaContainer.hentMiljøvariabler())).oppdater()
     }
 }

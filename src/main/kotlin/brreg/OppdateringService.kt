@@ -5,10 +5,10 @@ import kotlinx.serialization.json.Json
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-class OppdateringService(private val brregApi: BrregApi) {
+class OppdateringService(private val brregApi: BrregApi, private val kafkaProdusent: KafkaProdusent) {
 
     suspend fun oppdater() {
-        val days = System.getenv("ANTALL_DAGER_SIDEN_OPPDATERING").toLong()
+        val days = Miljø.ANTALL_DAGER_SIDEN_OPPDATERING.toLong()
         val tidspunkt = ZonedDateTime.now(ZoneOffset.UTC).minusDays(days)
         var skalSøkeMer = true
         var sideAntall = 0
@@ -24,6 +24,7 @@ class OppdateringService(private val brregApi: BrregApi) {
     }
 
     private suspend fun sendTilKafka(endringstype: Endringstype, enheter: List<OppdateringDTO>) {
+        kafkaProdusent.sendMelding(topic = Miljø.KAFKA_TOPIC, "test", "test")
         if (endringstype == Endringstype.Fjernet || endringstype == Endringstype.Sletting) {
             println("Disse virksomhetene har endringstype $endringstype: ${Json.encodeToString(enheter)}")
             return
