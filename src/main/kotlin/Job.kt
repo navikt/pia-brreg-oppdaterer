@@ -22,6 +22,13 @@ object BrregClient {
             }))
         }
     }
+
+init {
+    Runtime.getRuntime().addShutdownHook(Thread {
+        println("HttpClient closing...")
+        httpClient.close()
+    })
+}
 }
 
 const val SØKE_STØRRELSE = 100
