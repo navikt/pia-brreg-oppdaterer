@@ -1,4 +1,5 @@
 plugins {
+    application
     kotlin("jvm") version "1.7.0"
     kotlin("plugin.serialization") version "1.7.0"
 }
@@ -29,4 +30,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "JobKt"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    configurations.compileClasspath.get().forEach {
+        from(if (it.isDirectory) it else zipTree(it))
+    }
 }
