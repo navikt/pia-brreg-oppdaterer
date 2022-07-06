@@ -26,8 +26,8 @@ object BrregClient {
 
 const val SØKE_STØRRELSE = 100
 
-suspend fun main(args: Array<String>) {
-    val days = if (args.isNotEmpty()) args[0].toLong() else 1
+suspend fun main() {
+    val days = System.getenv("ANTALL_DAGER_SIDEN_OPPDATERING").toLong()
     val yesterday = ZonedDateTime.now(ZoneOffset.UTC).minusDays(days)
         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
     var url =
