@@ -1,10 +1,10 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: mytopic
-  namespace: myteam
+  name: brreg-oppdatering
+  namespace: pia
   labels:
-    team: myteam
+    team: pia
 spec:
   pool: {{kafka-pool}}
   config:  # optional; all fields are optional too; defaults shown
