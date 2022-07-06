@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.serialization") version "1.7.0"
 }
 
-group = "org.example"
+group = "no.navikt"
 version = "1.0-SNAPSHOT"
 
 repositories {
