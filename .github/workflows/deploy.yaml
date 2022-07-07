@@ -19,6 +19,33 @@ jobs:
           cache: 'gradle'
       - name: "Compile, run tests and build"
         run: "./gradlew build --no-daemon"
+
+  "deployTopicsToDev":
+    name: "Deploy topics to dev"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+      - name: "Deploy topics to dev-gcp"
+        uses: "nais/deploy/actions/deploy@master"
+        env:
+          APIKEY: "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          CLUSTER: "dev-gcp"
+          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
+          VARS: ".nais/dev.yaml"
+  "deployTopicsToProd":
+    name: "Deploy topics to prod"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+      - name: "Deploy topics to prod-gcp"
+        uses: "nais/deploy/actions/deploy@master"
+        env:
+          APIKEY: "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          CLUSTER: "prod-gcp"
+          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
+          VARS: ".nais/prod.yaml"
 #      - name: "Login to GitHub Docker Registry"
 #        uses: "docker/login-action@v2"
 #        with:
@@ -31,4 +58,3 @@ jobs:
 #          context: .
 #          push: true
 #          tags: ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}
-#
