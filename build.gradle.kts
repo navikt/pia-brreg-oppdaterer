@@ -16,6 +16,7 @@ val kotlinx_datetime_version: String by project
 val junit_version: String by project
 val ktor_version: String by project
 val testcontainers_version: String by project
+val kotest_version: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -36,6 +37,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3")
     testImplementation("org.testcontainers:testcontainers:$testcontainers_version")
     testImplementation("org.testcontainers:kafka:$testcontainers_version")
+    testImplementation("io.kotest:kotest-assertions-core:$kotest_version")
+    testImplementation("io.kotest:kotest-assertions-json:$kotest_version")
 }
 
 tasks.test {

@@ -1,11 +1,8 @@
-import brreg.BrregClient
-import brreg.KafkaProdusent
-import brreg.Miljø
-import brreg.OppdateringService
+import brreg.*
 
 suspend fun main() {
     OppdateringService(
         brregApi = BrregClient(),
-        kafkaProdusent = KafkaProdusent(kafkaConfig = Miljø.producerProperties())
+        kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties())
     ).oppdater()
 }

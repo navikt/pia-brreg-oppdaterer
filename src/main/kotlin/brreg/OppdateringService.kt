@@ -1,5 +1,6 @@
 package brreg
 
+import brreg.Miljø.KAFKA_TOPIC
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.ZoneOffset
@@ -24,13 +25,12 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
     }
 
     private suspend fun sendTilKafka(endringstype: Endringstype, enheter: List<OppdateringDTO>) {
-        kafkaProdusent.sendMelding(topic = Miljø.KAFKA_TOPIC, "test", "test")
         if (endringstype == Endringstype.Fjernet || endringstype == Endringstype.Sletting) {
-            println("Disse virksomhetene har endringstype $endringstype: ${Json.encodeToString(enheter)}")
+            kafkaProdusent.sendMelding(KAFKA_TOPIC, endringstype.name, Json.encodeToString(enheter))
             return
         }
         val data = brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
-        println("Endringstype $endringstype data $data")
+        kafkaProdusent.sendMelding(KAFKA_TOPIC, endringstype.name, data)
     }
 
 }

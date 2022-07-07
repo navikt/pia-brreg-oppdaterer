@@ -1,17 +1,33 @@
 package brreg
 
 import brreg.Miljø.KAFKA_TOPIC
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.time.withTimeoutOrNull
+import kotlinx.coroutines.withContext
+import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.NewTopic
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.config.SaslConfigs
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 class KafkaContainerHelper {
     companion object {
+        const val CLIENT_ID = "pia-brreg"
+        const val GROUP_ID = "pia-brreg"
+
         private var adminClient: AdminClient
 
         val kafkaContainer = KafkaContainer(
@@ -21,7 +37,8 @@ class KafkaContainerHelper {
             .waitingFor(HostPortWaitStrategy())
             .apply {
                 start()
-                adminClient = AdminClient.create(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers))
+                adminClient =
+                    AdminClient.create(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers))
                 createTopic(KAFKA_TOPIC)
             }
 
@@ -30,14 +47,55 @@ class KafkaContainerHelper {
                 .map { topic -> NewTopic(topic, 1, 1.toShort()) }
             adminClient.createTopics(newTopics)
         }
+
+        private suspend fun ventTilKonsumert(offset: Long) =
+            withTimeoutOrNull(Duration.ofSeconds(5)) {
+                do {
+                    delay(timeMillis = 10L)
+                } while (consumerSinOffset() <= offset)
+            }
+
+        private fun consumerSinOffset(): Long {
+            val offsetMetadata = adminClient.listConsumerGroupOffsets(GROUP_ID)
+                .partitionsToOffsetAndMetadata().get()
+            return offsetMetadata[offsetMetadata.keys.firstOrNull()]?.offset() ?: -1
+        }
+
+        fun KafkaContainer.kafkaProducer() = object : KafkaProdusent {
+            private val produsent = KafkaProducer<String, String>(
+                mapOf(
+                    ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to this@kafkaProducer.bootstrapServers,
+                    ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
+                    ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
+                    ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true, // Den sikrer rekkefølge
+                    ProducerConfig.ACKS_CONFIG to "all", // Den sikrer at data ikke mistes
+                    ProducerConfig.CLIENT_ID_CONFIG to CLIENT_ID,
+                )
+            )
+
+            override fun sendMelding(topic: String, nøkkel: String, verdi: String) {
+                runBlocking {
+                    val metadata = withContext(Dispatchers.IO) {
+                        produsent.send(ProducerRecord(topic, nøkkel, verdi)).get()
+                    }
+                    ventTilKonsumert(metadata.offset())
+                }
+            }
+        }
+
+        fun KafkaContainer.kafkaKonsument() = KafkaConsumer<String, String>(
+            mapOf(
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+                CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers,
+                ConsumerConfig.GROUP_ID_CONFIG to GROUP_ID,
+                ConsumerConfig.CLIENT_ID_CONFIG to CLIENT_ID,
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
+                ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000",
+                CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to "PLAINTEXT",
+                SaslConfigs.SASL_MECHANISM to "PLAIN",
+            )
+        )
     }
 }
 
-fun KafkaContainer.hentMiljøvariabler() = mapOf(
-    ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers,
-    ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
-    ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
-    ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true, // Den sikrer rekkefølge
-    ProducerConfig.ACKS_CONFIG to "all", // Den sikrer at data ikke mistes
-    ProducerConfig.CLIENT_ID_CONFIG to "pia-brreg",
-)

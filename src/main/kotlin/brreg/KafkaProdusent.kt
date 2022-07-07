@@ -3,7 +3,11 @@ package brreg
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 
-class KafkaProdusent(kafkaConfig: Map<String, Any>) {
+interface KafkaProdusent {
+    fun sendMelding(topic: String, nøkkel: String, verdi: String)
+}
+
+class DefaultKafkaProdusent(kafkaConfig: Map<String, Any>): KafkaProdusent {
     private val producer: KafkaProducer<String, String> = KafkaProducer(kafkaConfig)
 
     init {
@@ -12,7 +16,7 @@ class KafkaProdusent(kafkaConfig: Map<String, Any>) {
         })
     }
 
-    fun sendMelding(topic: String, nøkkel: String, verdi: String) {
+    override fun sendMelding(topic: String, nøkkel: String, verdi: String) {
         producer.send(ProducerRecord(topic, nøkkel, verdi))
     }
 }

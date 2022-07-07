@@ -1,26 +1,38 @@
 package brreg
 
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
+import brreg.KafkaContainerHelper.Companion.kafkaContainer
+import brreg.KafkaContainerHelper.Companion.kafkaKonsument
+import brreg.KafkaContainerHelper.Companion.kafkaProducer
+import brreg.Miljø.KAFKA_TOPIC
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.string.shouldContain
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.time.withTimeout
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import java.time.Duration
+import kotlin.collections.set
+import kotlin.test.fail
 
 internal class OppdateringServiceTest {
 
     companion object {
-
+        private lateinit var konsument: KafkaConsumer<String, String>
         private lateinit var mockClient: BrregClient
+
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
             val engine = MockEngine.create {
                 addHandler { request ->
                     val path = request.url.encodedPath
-                    println(path)
                     if (path == "/enhetsregisteret/api/oppdateringer/underenheter") {
                         val json = underenhetOppdateringMock()
                         respond(content = json, headers = headersOf(HttpHeaders.ContentType, "application/json"))
@@ -33,6 +45,16 @@ internal class OppdateringServiceTest {
                 }
             }
             mockClient = BrregClient(engine)
+
+            konsument = kafkaContainer.kafkaKonsument()
+            konsument.subscribe(listOf(KAFKA_TOPIC))
+        }
+
+        @AfterAll
+        @JvmStatic
+        internal fun afterAll() {
+            konsument.unsubscribe()
+            konsument.close()
         }
 
         private fun underenheterMock(query: String): String {
@@ -45,7 +67,7 @@ internal class OppdateringServiceTest {
             return """{
       "_embedded": {
         "underenheter": [
-          ${q["organisasjonsnummer"]!!.split(",").map { enkeltVirksomhetMock(it)}.joinToString(separator = ",")}
+          ${q["organisasjonsnummer"]!!.split(",").map { enkeltVirksomhetMock(it) }.joinToString(separator = ",")}
         ]
       },
       "_links": {
@@ -242,10 +264,48 @@ internal class OppdateringServiceTest {
         }""".trimIndent()
     }
 
-
+    private val alleEndredeOrgnummere = listOf(
+        "927818310",
+        "997373979",
+        "895699322",
+        "924349433",
+        "919274018",
+    )
+    private val alleSlettedeOrgnummere = listOf(
+        "817704522",
+        "926916440",
+        "928717844",
+        "915250505",
+        "915216870",
+    )
 
     @Test
+    @ExperimentalCoroutinesApi
     fun oppdater() = runTest {
-        OppdateringService(mockClient, KafkaProdusent(KafkaContainerHelper.kafkaContainer.hentMiljøvariabler())).oppdater()
+        OppdateringService(mockClient, kafkaContainer.kafkaProducer()).oppdater()
+        withTimeout(Duration.ofSeconds(10)) {
+            launch {
+                while (this.isActive) {
+                    val records = konsument.poll(Duration.ofMillis(100))
+                    if (!records.isEmpty) {
+                        records.forEach { record ->
+                            if (record.key() == Endringstype.Endring.name) {
+                                alleEndredeOrgnummere.forAll {
+                                    record.value() shouldContain it
+                                }
+                            } else if (record.key() == Endringstype.Sletting.name) {
+                                alleSlettedeOrgnummere.forAll {
+                                    record.value() shouldContain it
+                                }
+                            } else {
+                                fail("Endringstype ${record.key()} burde ikke være i data")
+                            }
+                        }
+                        break
+                    }
+
+                }
+            }
+        }
     }
 }
