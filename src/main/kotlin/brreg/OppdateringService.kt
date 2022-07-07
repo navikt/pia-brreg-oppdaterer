@@ -1,6 +1,8 @@
 package brreg
 
 import brreg.Miljø.KAFKA_TOPIC
+import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.ZoneOffset
@@ -25,13 +27,28 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
     }
 
     private suspend fun sendTilKafka(endringstype: Endringstype, enheter: List<OppdateringDTO>) {
-        if (endringstype == Endringstype.Fjernet || endringstype == Endringstype.Sletting) {
-            kafkaProdusent.sendMelding(KAFKA_TOPIC, endringstype.name, Json.encodeToString(enheter))
-            return
+        val underenheterFraBrreg = when(endringstype) {
+            Endringstype.Sletting,
+            Endringstype.Fjernet -> emptyList()
+            else -> brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
         }
-        val data = brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
-        kafkaProdusent.sendMelding(KAFKA_TOPIC, endringstype.name, data)
+        enheter.forEach { enhet ->
+            val melding = OppdateringVirksomhet(
+                orgnummer = enhet.organisasjonsnummer,
+                endringstype = endringstype,
+                endringstidspunkt = enhet.dato,
+                metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer }
+            )
+            kafkaProdusent.sendMelding(KAFKA_TOPIC, enhet.organisasjonsnummer, Json.encodeToString(melding))
+        }
     }
-
 }
+
+@Serializable
+internal data class OppdateringVirksomhet(
+    val orgnummer: String,
+    val endringstype: Endringstype,
+    val metadata: BrregVirksomhetDto? = null,
+    val endringstidspunkt: Instant
+)
 

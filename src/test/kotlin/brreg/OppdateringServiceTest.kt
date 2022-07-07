@@ -4,22 +4,24 @@ import brreg.KafkaContainerHelper.Companion.kafkaContainer
 import brreg.KafkaContainerHelper.Companion.kafkaKonsument
 import brreg.KafkaContainerHelper.Companion.kafkaProducer
 import brreg.Miljø.KAFKA_TOPIC
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.string.shouldContain
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
+import io.kotest.matchers.collections.shouldContain
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.time.withTimeout
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.time.Duration
 import kotlin.collections.set
-import kotlin.test.fail
 
 internal class OppdateringServiceTest {
 
@@ -37,7 +39,7 @@ internal class OppdateringServiceTest {
                         val json = underenhetOppdateringMock()
                         respond(content = json, headers = headersOf(HttpHeaders.ContentType, "application/json"))
                     } else if (path == "/enhetsregisteret/api/underenheter") {
-                        respond(content = underenheterMock(request.url.encodedQuery))
+                        respond(content = underenheterMock(request.url.encodedQuery), headers = headersOf(HttpHeaders.ContentType, "application/json"))
                     } else {
                         respond(status = HttpStatusCode.NotFound, content = "NOT FOUND")
                     }
@@ -132,7 +134,7 @@ internal class OppdateringServiceTest {
                 "oppdateringsid": 14757180,
                 "dato": "2022-07-05T04:01:39.613Z",
                 "organisasjonsnummer": "927818310",
-                "endringstype": "Endring",
+                "endringstype": "Fjernet",
                 "_links": {
                   "underenhet": {
                     "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/927818310"
@@ -264,7 +266,6 @@ internal class OppdateringServiceTest {
     }
 
     private val alleEndredeOrgnummere = listOf(
-        "927818310",
         "997373979",
         "895699322",
         "924349433",
@@ -276,6 +277,7 @@ internal class OppdateringServiceTest {
         "928717844",
         "915250505",
         "915216870",
+        "927818310",
     )
 
     @Test
@@ -283,26 +285,19 @@ internal class OppdateringServiceTest {
     fun oppdater() = runTest {
         OppdateringService(mockClient, kafkaContainer.kafkaProducer()).oppdater()
         withTimeout(Duration.ofSeconds(10)) {
-            launch {
-                while (this.isActive) {
-                    val records = konsument.poll(Duration.ofMillis(100))
-                    if (!records.isEmpty) {
-                        records.forEach { record ->
-                            if (record.key() == Endringstype.Endring.name) {
-                                alleEndredeOrgnummere.forAll {
-                                    record.value() shouldContain it
-                                }
-                            } else if (record.key() == Endringstype.Sletting.name) {
-                                alleSlettedeOrgnummere.forAll {
-                                    record.value() shouldContain it
-                                }
-                            } else {
-                                fail("Endringstype ${record.key()} burde ikke være i data")
-                            }
+            while (this.isActive) {
+                val records = konsument.poll(Duration.ofMillis(100))
+                if (!records.isEmpty) {
+                    records.forEach { record ->
+                        val melding = Json.decodeFromString<OppdateringVirksomhet>(record.value())
+                        when (melding.endringstype) {
+                            Endringstype.Fjernet,
+                            Endringstype.Sletting -> alleSlettedeOrgnummere shouldContain melding.orgnummer
+                            Endringstype.Endring -> alleEndredeOrgnummere shouldContain melding.orgnummer
+                            else -> Unit
                         }
-                        break
                     }
-
+                    break
                 }
             }
         }

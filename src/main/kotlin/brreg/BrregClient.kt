@@ -6,8 +6,8 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -37,11 +37,17 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
         return response.body()
     }
 
-    override suspend fun hentUnderenheter(orgnummere: List<String>): String {
+    override suspend fun hentUnderenheter(orgnummere: List<String>): List<BrregVirksomhetDto> {
         val orgnumreSomString = orgnummere.joinToString(separator = ",")
         val url =
             "https://data.brreg.no/enhetsregisteret/api/underenheter?organisasjonsnummer=$orgnumreSomString&size=${orgnummere.size}"
         val response = httpClient.get(url)
-        return response.bodyAsText()
+        return response.body<BrregUnderenheterResponsDTO>()._embedded.underenheter
     }
 }
+
+@Serializable
+private data class BrregUnderenheterResponsDTO(val _embedded: BrregUnderenheterEmbeddedDTO, val _links: LinksDTO, val page: PageDTO)
+
+@Serializable
+private data class BrregUnderenheterEmbeddedDTO(val underenheter: List<BrregVirksomhetDto>)

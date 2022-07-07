@@ -48,19 +48,6 @@ class KafkaContainerHelper {
             adminClient.createTopics(newTopics)
         }
 
-        private suspend fun ventTilKonsumert(offset: Long) =
-            withTimeoutOrNull(Duration.ofSeconds(5)) {
-                do {
-                    delay(timeMillis = 10L)
-                } while (consumerSinOffset() <= offset)
-            }
-
-        private fun consumerSinOffset(): Long {
-            val offsetMetadata = adminClient.listConsumerGroupOffsets(GROUP_ID)
-                .partitionsToOffsetAndMetadata().get()
-            return offsetMetadata[offsetMetadata.keys.firstOrNull()]?.offset() ?: -1
-        }
-
         fun KafkaContainer.kafkaProducer() = object : KafkaProdusent {
             private val produsent = KafkaProducer<String, String>(
                 mapOf(
@@ -74,11 +61,8 @@ class KafkaContainerHelper {
             )
 
             override fun sendMelding(topic: String, nøkkel: String, verdi: String) {
-                runBlocking {
-                    val metadata = withContext(Dispatchers.IO) {
-                        produsent.send(ProducerRecord(topic, nøkkel, verdi)).get()
-                    }
-                    ventTilKonsumert(metadata.offset())
+                runBlocking(context = Dispatchers.IO) {
+                    produsent.send(ProducerRecord(topic, nøkkel, verdi)).get()
                 }
             }
         }
