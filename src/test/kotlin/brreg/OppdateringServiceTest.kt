@@ -37,7 +37,6 @@ internal class OppdateringServiceTest {
                         val json = underenhetOppdateringMock()
                         respond(content = json, headers = headersOf(HttpHeaders.ContentType, "application/json"))
                     } else if (path == "/enhetsregisteret/api/underenheter") {
-                        println(request.url)
                         respond(content = underenheterMock(request.url.encodedQuery))
                     } else {
                         respond(status = HttpStatusCode.NotFound, content = "NOT FOUND")
