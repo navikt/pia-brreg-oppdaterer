@@ -27,13 +27,10 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
     }
 
     private suspend fun sendTilKafka(endringstype: Endringstype, enheter: List<OppdateringDTO>) {
-        val underenheterFraBrreg = when(endringstype) {
-            Endringstype.Sletting,
-            Endringstype.Fjernet -> emptyList()
-            else -> brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
-        }
+        val underenheterFraBrreg = hentEndredeUnderenheter(endringstype, enheter)
         enheter.forEach { enhet ->
             val melding = OppdateringVirksomhet(
+                oppdateringsid = enhet.oppdateringsid,
                 orgnummer = enhet.organisasjonsnummer,
                 endringstype = endringstype,
                 endringstidspunkt = enhet.dato,
@@ -42,10 +39,23 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
             kafkaProdusent.sendMelding(KAFKA_TOPIC, enhet.organisasjonsnummer, Json.encodeToString(melding))
         }
     }
+
+    private suspend fun hentEndredeUnderenheter(
+        endringstype: Endringstype,
+        enheter: List<OppdateringDTO>
+    ): List<BrregVirksomhetDto> {
+        val underenheterFraBrreg = when (endringstype) {
+            Endringstype.Sletting,
+            Endringstype.Fjernet -> emptyList()
+            else -> brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
+        }
+        return underenheterFraBrreg
+    }
 }
 
 @Serializable
 internal data class OppdateringVirksomhet(
+    val oppdateringsid: Long,
     val orgnummer: String,
     val endringstype: Endringstype,
     val metadata: BrregVirksomhetDto? = null,

@@ -39,7 +39,10 @@ internal class OppdateringServiceTest {
                         val json = underenhetOppdateringMock()
                         respond(content = json, headers = headersOf(HttpHeaders.ContentType, "application/json"))
                     } else if (path == "/enhetsregisteret/api/underenheter") {
-                        respond(content = underenheterMock(request.url.encodedQuery), headers = headersOf(HttpHeaders.ContentType, "application/json"))
+                        respond(
+                            content = underenheterMock(request.url.encodedQuery),
+                            headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        )
                     } else {
                         respond(status = HttpStatusCode.NotFound, content = "NOT FOUND")
                     }
@@ -271,6 +274,18 @@ internal class OppdateringServiceTest {
         "924349433",
         "919274018",
     )
+    private val alleEndredeOppdateringsid = listOf(
+        14757185L,
+        14757192L,
+        14757197L,
+        14757202L,
+    )
+    private val alleFjernedeOrgnummere = listOf(
+        "927818310"
+    )
+    private val alleFjernedeOppdateringsid = listOf(
+        14757180L
+    )
     private val alleSlettedeOrgnummere = listOf(
         "817704522",
         "926916440",
@@ -278,6 +293,13 @@ internal class OppdateringServiceTest {
         "915250505",
         "915216870",
         "927818310",
+    )
+    private val alleSlettedeOppdateringsid = listOf(
+        14757184L,
+        14757189L,
+        14757191L,
+        14757196L,
+        14757205L
     )
 
     @Test
@@ -291,9 +313,18 @@ internal class OppdateringServiceTest {
                     records.forEach { record ->
                         val melding = Json.decodeFromString<OppdateringVirksomhet>(record.value())
                         when (melding.endringstype) {
-                            Endringstype.Fjernet,
-                            Endringstype.Sletting -> alleSlettedeOrgnummere shouldContain melding.orgnummer
-                            Endringstype.Endring -> alleEndredeOrgnummere shouldContain melding.orgnummer
+                            Endringstype.Fjernet -> {
+                                alleFjernedeOrgnummere shouldContain melding.orgnummer
+                                alleFjernedeOppdateringsid shouldContain melding.oppdateringsid
+                            }
+                            Endringstype.Sletting -> {
+                                alleSlettedeOrgnummere shouldContain melding.orgnummer
+                                alleSlettedeOppdateringsid shouldContain melding.oppdateringsid
+                            }
+                            Endringstype.Endring -> {
+                                alleEndredeOrgnummere shouldContain melding.orgnummer
+                                alleEndredeOppdateringsid shouldContain melding.oppdateringsid
+                            }
                             else -> Unit
                         }
                     }
