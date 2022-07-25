@@ -6,8 +6,8 @@ on:
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:
-  "build":
-    name: "build"
+  build:
+    name: Bygg og push docker image
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v3"
@@ -19,8 +19,19 @@ jobs:
           cache: 'gradle'
       - name: "Compile, run tests and build"
         run: "./gradlew build --no-daemon"
-
-  "deployTopicsToDev":
+      - name: "Login to GitHub Docker Registry"
+        uses: "docker/login-action@v2"
+        with:
+          "registry": "ghcr.io"
+          "username": "${{ github.actor }}"
+          "password": "${{ secrets.GITHUB_TOKEN }}"
+      - name: "Build and push the Docker image"
+        uses: "docker/build-push-action@v3"
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}
+  deployTopicsToDev:
     name: "Deploy topics to dev"
     runs-on: "ubuntu-latest"
     steps:
@@ -33,7 +44,7 @@ jobs:
           CLUSTER: "dev-gcp"
           RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
           VARS: ".nais/dev.yaml"
-  "deployTopicsToProd":
+  deployTopicsToProd:
     name: "Deploy topics to prod"
     runs-on: "ubuntu-latest"
     steps:
@@ -46,15 +57,27 @@ jobs:
           CLUSTER: "prod-gcp"
           RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
           VARS: ".nais/prod.yaml"
-#      - name: "Login to GitHub Docker Registry"
-#        uses: "docker/login-action@v2"
-#        with:
-#          "registry": "ghcr.io"
-#          "username": "${{ github.actor }}"
-#          "password": "${{ secrets.GITHUB_TOKEN }}"
-#      - name: "Build and push the Docker image"
-#        uses: "docker/build-push-action@v3"
-#        with:
-#          context: .
-#          push: true
-#          tags: ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}
+  deploy-dev:
+    name: Deploy NaisJob til NAIS dev
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "dev-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/dev.yaml"
+  deploy-prod:
+    name: Deploy NaisJob til NAIS prod
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "prod-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/prod.yaml"
