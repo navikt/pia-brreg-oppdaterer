@@ -6,7 +6,7 @@ metadata:
   name: brreg-oppdaterer
   namespace: pia
 spec:
-  image: ghcr.io/navikt/myapp:mytag
+  image: {{ image }}
   schedule: "0 19 * * *" # Kl 19 hver dag
   kafka:
     pool: {{kafka-pool}}
