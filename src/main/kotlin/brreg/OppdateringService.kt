@@ -5,10 +5,12 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.slf4j.LoggerFactory
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class OppdateringService(private val brregApi: BrregApi, private val kafkaProdusent: KafkaProdusent) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     suspend fun oppdater() {
         val days = Miljø.ANTALL_DAGER_SIDEN_OPPDATERING.toLong()
@@ -37,6 +39,7 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
                 metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer }
             )
             kafkaProdusent.sendMelding(KAFKA_TOPIC, enhet.organisasjonsnummer, Json.encodeToString(melding))
+            logger.info("Sendte oppdatering på ${enhet.organisasjonsnummer} på Kafka for dato ${enhet.dato}")
         }
     }
 
