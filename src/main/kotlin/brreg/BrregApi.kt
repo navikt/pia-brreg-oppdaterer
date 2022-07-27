@@ -26,11 +26,11 @@ data class NæringsundergruppeBrreg(
 
 @Serializable
 data class Beliggenhetsadresse(
-    val land: String?,
-    val landkode: String?,
-    val postnummer: String?,
-    val poststed: String?,
-    val adresse: List<String>?,
-    val kommune: String?,
-    val kommunenummer: String?
+    val land: String? = null,
+    val landkode: String? = null,
+    val postnummer: String? = null,
+    val poststed: String? = null,
+    val adresse: List<String>? = null,
+    val kommune: String? = null,
+    val kommunenummer: String? = null
 )

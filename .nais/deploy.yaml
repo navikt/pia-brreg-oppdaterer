@@ -10,3 +10,6 @@ spec:
   schedule: "0 19 * * *" # Kl 19 hver dag
   kafka:
     pool: {{kafka-pool}}
+  env:
+    - name: ANTALL_DAGER_SIDEN_OPPDATERING
+      value: "2"
