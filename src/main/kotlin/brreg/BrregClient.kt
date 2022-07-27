@@ -32,7 +32,7 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
 
     override suspend fun hentOppdaterteUnderenheter(tidspunkt: ZonedDateTime, side: Int): BrregOppdateringDTO {
         val antallDagerSidenSistOppdatering = tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
-        val url = "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=${antallDagerSidenSistOppdatering}&size=$SØKE_STØRRELSE&page=$side"
+        val url = "${Miljø.BRREG_OPPDATERING_UNDERENHET_URL}?dato=${antallDagerSidenSistOppdatering}&size=$SØKE_STØRRELSE&page=$side"
         val response = httpClient.get(url)
         return response.body()
     }

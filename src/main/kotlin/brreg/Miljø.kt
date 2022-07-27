@@ -8,10 +8,13 @@ import java.io.Serializable
 
 object Miljø {
     val ANTALL_DAGER_SIDEN_OPPDATERING = getEnvVar("ANTALL_DAGER_SIDEN_OPPDATERING", "1")
+    val BRREG_OPPDATERING_UNDERENHET_URL = getEnvVar("BRREG_OPPDATERING_UNDERENHET_URL",
+        "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter")
     val KAFKA_BROKERS = getEnvVar("KAFKA_BROKERS", "")
     val KAFKA_TRUSTSTORE_PATH = getEnvVar("KAFKA_TRUSTSTORE_PATH", "")
     val KAFKA_KEYSTORE_PATH = getEnvVar("KAFKA_KEYSTORE_PATH", "")
     val KAFKA_CREDSTORE_PASSWORD = getEnvVar("KAFKA_CREDSTORE_PASSWORD", "")
+
     const val KAFKA_TOPIC = "pia.brreg-oppdatering"
 
     fun producerProperties(): Map<String, Serializable> {
