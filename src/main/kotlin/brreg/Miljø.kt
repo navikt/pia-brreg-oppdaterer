@@ -7,13 +7,17 @@ import org.apache.kafka.common.serialization.StringSerializer
 import java.io.Serializable
 
 object Miljø {
-    val ANTALL_DAGER_SIDEN_OPPDATERING = getEnvVar("ANTALL_DAGER_SIDEN_OPPDATERING", "1")
-    val BRREG_OPPDATERING_UNDERENHET_URL = getEnvVar("BRREG_OPPDATERING_UNDERENHET_URL",
-        "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter")
-    val KAFKA_BROKERS = getEnvVar("KAFKA_BROKERS", "")
-    val KAFKA_TRUSTSTORE_PATH = getEnvVar("KAFKA_TRUSTSTORE_PATH", "")
-    val KAFKA_KEYSTORE_PATH = getEnvVar("KAFKA_KEYSTORE_PATH", "")
-    val KAFKA_CREDSTORE_PASSWORD = getEnvVar("KAFKA_CREDSTORE_PASSWORD", "")
+    val ANTALL_DAGER_SIDEN_OPPDATERING = getEnvVar(envVar = "ANTALL_DAGER_SIDEN_OPPDATERING", default = "1")
+    val BRREG_OPPDATERING_UNDERENHET_URL = getEnvVar(
+        envVar = "BRREG_OPPDATERING_UNDERENHET_URL",
+        default = "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter"
+    )
+    val BRREG_UNDERENHET_URL =
+        getEnvVar(envVar = "BRREG_UNDERENHET_URL", default = "https://data.brreg.no/enhetsregisteret/api/underenheter")
+    val KAFKA_BROKERS = getEnvVar(envVar = "KAFKA_BROKERS", default = "")
+    val KAFKA_TRUSTSTORE_PATH = getEnvVar(envVar = "KAFKA_TRUSTSTORE_PATH", default = "")
+    val KAFKA_KEYSTORE_PATH = getEnvVar(envVar = "KAFKA_KEYSTORE_PATH", default = "")
+    val KAFKA_CREDSTORE_PASSWORD = getEnvVar(envVar = "KAFKA_CREDSTORE_PASSWORD", default = "")
 
     const val KAFKA_TOPIC = "pia.brreg-oppdatering"
 
