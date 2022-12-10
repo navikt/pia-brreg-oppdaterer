@@ -2,10 +2,7 @@ package brreg
 
 import brreg.Miljø.KAFKA_TOPIC
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.time.withTimeoutOrNull
-import kotlinx.coroutines.withContext
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
@@ -21,7 +18,6 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy
 import org.testcontainers.utility.DockerImageName
-import java.time.Duration
 
 class KafkaContainerHelper {
     companion object {
@@ -31,8 +27,7 @@ class KafkaContainerHelper {
         private var adminClient: AdminClient
 
         val kafkaContainer = KafkaContainer(
-            DockerImageName.parse("kymeric/cp-kafka")
-                .asCompatibleSubstituteFor("confluentinc/cp-kafka")
+            DockerImageName.parse("confluentinc/cp-kafka:7.2.2")
         )
             .waitingFor(HostPortWaitStrategy())
             .apply {

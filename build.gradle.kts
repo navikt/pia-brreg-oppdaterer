@@ -29,12 +29,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
     implementation("org.apache.kafka:kafka-clients:3.1.0")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("ch.qos.logback:logback-classic:1.4.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     testImplementation("org.testcontainers:testcontainers:$testcontainers_version")
     testImplementation("org.testcontainers:kafka:$testcontainers_version")
     testImplementation("io.kotest:kotest-assertions-core:$kotest_version")
