@@ -11,34 +11,35 @@ repositories {
     mavenCentral()
 }
 
-val kotlinx_serialization_json_version: String by project
-val kotlinx_datetime_version: String by project
-val junit_version: String by project
-val ktor_version: String by project
-val testcontainers_version: String by project
-val kotest_version: String by project
-
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
-    implementation("org.junit.jupiter:junit-jupiter:$junit_version")
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    val ktorVersion = "2.2.2"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:3.1.0")
+    implementation("org.apache.kafka:kafka-clients:3.3.1")
     implementation("ch.qos.logback:logback-classic:1.4.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
+    constraints {
+        implementation("com.fasterxml.jackson.core:jackson-databind:2.14.1") {
+            because("logstash-logback-encoder bruker sårbar jackson-databind se: https://devhub.checkmarx.com/cve-details/CVE-2022-42003")
+        }
+    }
 
     testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    testImplementation("org.testcontainers:testcontainers:$testcontainers_version")
-    testImplementation("org.testcontainers:kafka:$testcontainers_version")
-    testImplementation("io.kotest:kotest-assertions-core:$kotest_version")
-    testImplementation("io.kotest:kotest-assertions-json:$kotest_version")
+    val testcontainersVersion = "1.17.6"
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    testImplementation("org.testcontainers:kafka:$testcontainersVersion")
+    val kotestVersion = "5.5.4"
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
 }
 
 tasks.test {
