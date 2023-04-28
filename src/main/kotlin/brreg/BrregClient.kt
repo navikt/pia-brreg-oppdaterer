@@ -34,7 +34,7 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
 
     override suspend fun hentOppdaterteUnderenheter(tidspunkt: ZonedDateTime, oppdateringsId: Long?, side: Int): BrregOppdateringDTO {
         val startFilter = if(oppdateringsId != null) {
-            "oppdateringsId=$oppdateringsId"
+            "oppdateringsid=$oppdateringsId"
         } else {
             "dato=${tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))}"
         }
