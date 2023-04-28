@@ -9,12 +9,14 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 const val SØKE_STØRRELSE = 100
 
 class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
+    private val logger = LoggerFactory.getLogger(this::class.java)
     private val httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
             json(json = Json(builderAction = {
@@ -36,7 +38,13 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
         val url =
             "${Miljø.BRREG_OPPDATERING_UNDERENHET_URL}?dato=${antallDagerSidenSistOppdatering}&size=$SØKE_STØRRELSE&page=$side"
         val response = httpClient.get(url)
-        return response.body()
+        val brregOppdateringDTO = try {
+            response.body<BrregOppdateringDTO>()
+        } catch (e: Exception) {
+            logger.warn("Feil ved å hente følgende URL '$url'")
+            throw e
+        }
+        return brregOppdateringDTO
     }
 
     override suspend fun hentUnderenheter(orgnummere: List<String>): List<BrregVirksomhetDto> {
