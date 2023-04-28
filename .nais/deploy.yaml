@@ -8,6 +8,10 @@ metadata:
 spec:
   image: {{ image }}
   schedule: "0 19 * * *" # Kl 19 hver dag
+  accessPolicy:
+    outbound:
+      external:
+        - host: "https://data.brreg.no"
   kafka:
     pool: {{kafka-pool}}
   env:
