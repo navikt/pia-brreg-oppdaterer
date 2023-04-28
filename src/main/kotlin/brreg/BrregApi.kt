@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
 
 interface BrregApi {
-    suspend fun hentOppdaterteUnderenheter(tidspunkt: ZonedDateTime, side: Int): BrregOppdateringDTO
+    suspend fun hentOppdaterteUnderenheter(tidspunkt: ZonedDateTime, oppdateringsId: Long?, side: Int): BrregOppdateringDTO
     suspend fun hentUnderenheter(orgnummere: List<String>): List<BrregVirksomhetDto>
 }
 

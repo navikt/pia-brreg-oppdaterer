@@ -15,16 +15,21 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
     suspend fun oppdater() {
         val days = Miljø.ANTALL_DAGER_SIDEN_OPPDATERING.toLong()
         val tidspunkt = ZonedDateTime.now(ZoneOffset.UTC).minusDays(days)
+        var oppdateringsId: Long? = null
         var skalSøkeMer = true
-        var sideAntall = 0
+        var side = 0
         while (skalSøkeMer) {
-            val (_embedded, _, page) = brregApi.hentOppdaterteUnderenheter(tidspunkt, sideAntall)
+            val (_embedded, _, page) = brregApi.hentOppdaterteUnderenheter(tidspunkt, oppdateringsId, side)
             val enheterGruppertPåType = _embedded.oppdaterteUnderenheter.groupBy { it.endringstype }
             enheterGruppertPåType.entries.forEach { (key, value) ->
                 sendTilKafka(endringstype = key, enheter = value)
             }
             skalSøkeMer = page.number != (page.totalPages - 1)
-            sideAntall += 1
+            side += 1
+            if(side > 99) {
+                side = 0
+                oppdateringsId = _embedded.oppdaterteUnderenheter.last().oppdateringsid
+            }
         }
     }
 
