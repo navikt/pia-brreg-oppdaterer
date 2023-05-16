@@ -1,7 +1,7 @@
 plugins {
     application
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("jvm") version "1.8.21"
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 group = "no.navikt"
@@ -35,6 +35,10 @@ dependencies {
     val kotestVersion = "5.5.5"
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 tasks.test {
