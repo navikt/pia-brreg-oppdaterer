@@ -14,13 +14,13 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-    val ktorVersion = "2.3.0"
+    val ktorVersion = "2.3.1"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:3.4.0")
+    implementation("org.apache.kafka:kafka-clients:3.4.1")
     implementation("ch.qos.logback:logback-classic:1.4.7")
     implementation("net.logstash.logback:logstash-logback-encoder:7.3")
 
@@ -28,7 +28,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-    val testcontainersVersion = "1.18.1"
+    val testcontainersVersion = "1.18.3"
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
     val kotestVersion = "5.6.2"
