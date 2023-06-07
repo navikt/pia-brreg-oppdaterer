@@ -11,7 +11,7 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: "https://data.brreg.no"
+        - host: "data.brreg.no"
   kafka:
     pool: {{kafka-pool}}
   env:
