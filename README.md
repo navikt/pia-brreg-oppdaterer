@@ -9,11 +9,8 @@ Kjør `./gradlew build`
 
 # Henvendelser
 
-Enten:
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-Eller:
-Spørsmål knyttet til koden eller prosjektet kan stilles til `pia@nav.no`
 
 ## For NAV-ansatte
 
