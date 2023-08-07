@@ -21,8 +21,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     implementation("org.apache.kafka:kafka-clients:3.4.1")
-    implementation("ch.qos.logback:logback-classic:1.4.7")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.3")
+    implementation("ch.qos.logback:logback-classic:1.4.9")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
