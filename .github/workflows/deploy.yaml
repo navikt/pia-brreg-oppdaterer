@@ -5,8 +5,13 @@ on:
       - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+permissions: {}
+
 jobs:
   build:
+    permissions:
+      packages: write
     name: Bygg og push docker image
     runs-on: "ubuntu-latest"
     steps:
