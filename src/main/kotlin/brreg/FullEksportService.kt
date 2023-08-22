@@ -32,7 +32,7 @@ class FullEksportService(
 
     private val url: String = "https://data.brreg.no/enhetsregisteret/api/underenheter/lastned"
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
-    private val httpClient = HttpClient(engine)
+    private val httpClient = HttpClient(engine) { }
 
     init {
         Runtime.getRuntime().addShutdownHook(Thread {
