@@ -3,7 +3,7 @@ package brreg
 import brreg.KafkaContainerHelper.Companion.kafkaContainer
 import brreg.KafkaContainerHelper.Companion.kafkaKonsument
 import brreg.KafkaContainerHelper.Companion.kafkaProducer
-import brreg.Miljø.KAFKA_TOPIC
+import brreg.Miljø.KAFKA_TOPIC_OPPDATERINGER
 import io.kotest.matchers.collections.shouldContain
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -14,7 +14,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.time.withTimeout
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.junit.jupiter.api.AfterAll
@@ -51,7 +50,7 @@ internal class OppdateringServiceTest {
             mockClient = BrregClient(engine)
 
             konsument = kafkaContainer.kafkaKonsument()
-            konsument.subscribe(listOf(KAFKA_TOPIC))
+            konsument.subscribe(listOf(KAFKA_TOPIC_OPPDATERINGER))
         }
 
         @AfterAll

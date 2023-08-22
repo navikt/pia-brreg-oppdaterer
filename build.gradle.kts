@@ -23,6 +23,7 @@ dependencies {
     implementation("org.apache.kafka:kafka-clients:3.4.1")
     implementation("ch.qos.logback:logback-classic:1.4.9")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")

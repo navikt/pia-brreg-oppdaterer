@@ -1,6 +1,7 @@
 package brreg
 
-import brreg.Miljø.KAFKA_TOPIC
+import brreg.Miljø.KAFKA_TOPIC_ALLE_VIRKSOMHETER
+import brreg.Miljø.KAFKA_TOPIC_OPPDATERINGER
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.CommonClientConfigs
@@ -34,7 +35,7 @@ class KafkaContainerHelper {
                 start()
                 adminClient =
                     AdminClient.create(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers))
-                createTopic(KAFKA_TOPIC)
+                createTopic(KAFKA_TOPIC_OPPDATERINGER, KAFKA_TOPIC_ALLE_VIRKSOMHETER)
             }
 
         private fun createTopic(vararg topics: String) {

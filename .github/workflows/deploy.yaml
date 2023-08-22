@@ -54,7 +54,7 @@ jobs:
         env:
           APIKEY: "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           CLUSTER: "dev-gcp"
-          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
+          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml,.nais/topics/topic-brreg-alle-virksomheter.yaml"
           VARS: ".nais/dev.yaml"
   deployTopicsToProd:
     name: "Deploy topics to prod"

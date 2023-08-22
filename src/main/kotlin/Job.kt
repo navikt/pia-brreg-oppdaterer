@@ -1,8 +1,18 @@
 import brreg.*
 
 suspend fun main() {
-    OppdateringService(
-        brregApi = BrregClient(),
-        kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties())
-    ).oppdater()
+    val kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties())
+    when(Miljø.LAST_NED_ALLE_VIRKSOMHETER) {
+        "true" -> {
+            FullEksportService(
+                kafkaProdusent = kafkaProdusent
+            ).lastNed()
+        }
+        else -> {
+            OppdateringService(
+                brregApi = BrregClient(),
+                kafkaProdusent = kafkaProdusent
+            ).oppdater()
+        }
+    }
 }

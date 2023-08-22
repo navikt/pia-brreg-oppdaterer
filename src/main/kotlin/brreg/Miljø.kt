@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.StringSerializer
 import java.io.Serializable
 
 object Miljø {
+    val LAST_NED_ALLE_VIRKSOMHETER = getEnvVar("LAST_NED_ALLE_VIRKSOMHETER", "false")
     val ANTALL_DAGER_SIDEN_OPPDATERING = getEnvVar(envVar = "ANTALL_DAGER_SIDEN_OPPDATERING", default = "1")
     val BRREG_OPPDATERING_UNDERENHET_URL = getEnvVar(
         envVar = "BRREG_OPPDATERING_UNDERENHET_URL",
@@ -19,7 +20,8 @@ object Miljø {
     val KAFKA_KEYSTORE_PATH = getEnvVar(envVar = "KAFKA_KEYSTORE_PATH", default = "")
     val KAFKA_CREDSTORE_PASSWORD = getEnvVar(envVar = "KAFKA_CREDSTORE_PASSWORD", default = "")
 
-    const val KAFKA_TOPIC = "pia.brreg-oppdatering"
+    const val KAFKA_TOPIC_OPPDATERINGER = "pia.brreg-oppdatering"
+    const val KAFKA_TOPIC_ALLE_VIRKSOMHETER = "pia.brreg-alle-virksomheter"
 
     fun producerProperties(): Map<String, Serializable> {
         val producerConfigs = mutableMapOf(
