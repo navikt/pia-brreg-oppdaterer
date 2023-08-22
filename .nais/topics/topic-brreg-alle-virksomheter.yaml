@@ -16,7 +16,7 @@ spec:
     retentionHours: 168  # En uke
   acl:
     - team: pia
-      application: brreg-oppdaterer
+      application: brreg-alle-virksomheter
       access: readwrite   # read, write, readwrite
     - team: pia
       application: lydia-api
