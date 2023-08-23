@@ -1,17 +1,16 @@
 import brreg.*
 
 suspend fun main() {
-    val kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties())
     when(Miljø.LAST_NED_ALLE_VIRKSOMHETER) {
         "true" -> {
             FullEksportService(
-                kafkaProdusent = kafkaProdusent
+                kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties(klientId = "pia-brreg-alle-virksomheter"))
             ).lastNed()
         }
         else -> {
             OppdateringService(
                 brregApi = BrregClient(),
-                kafkaProdusent = kafkaProdusent
+                kafkaProdusent = DefaultKafkaProdusent(kafkaConfig = Miljø.producerProperties(klientId = "pia-brreg-oppdaterer"))
             ).oppdater()
         }
     }

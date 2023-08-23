@@ -23,14 +23,14 @@ object Miljø {
     const val KAFKA_TOPIC_OPPDATERINGER = "pia.brreg-oppdatering"
     const val KAFKA_TOPIC_ALLE_VIRKSOMHETER = "pia.brreg-alle-virksomheter"
 
-    fun producerProperties(): Map<String, Serializable> {
+    fun producerProperties(klientId: String): Map<String, Serializable> {
         val producerConfigs = mutableMapOf(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to KAFKA_BROKERS,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
             ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true, // Den sikrer rekkefølge
             ProducerConfig.ACKS_CONFIG to "all", // Den sikrer at data ikke mistes
-            ProducerConfig.CLIENT_ID_CONFIG to "pia-brreg"
+            ProducerConfig.CLIENT_ID_CONFIG to klientId
         )
 
         if (KAFKA_TRUSTSTORE_PATH.isNotEmpty()) {

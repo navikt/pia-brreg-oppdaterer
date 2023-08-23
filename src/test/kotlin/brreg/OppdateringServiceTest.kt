@@ -49,7 +49,7 @@ internal class OppdateringServiceTest {
             }
             mockClient = BrregClient(engine)
 
-            konsument = kafkaContainer.kafkaKonsument()
+            konsument = kafkaContainer.kafkaKonsument(klientId = "pia-brreg-oppdaterer")
             konsument.subscribe(listOf(KAFKA_TOPIC_OPPDATERINGER))
         }
 
@@ -304,7 +304,7 @@ internal class OppdateringServiceTest {
     @Test
     @ExperimentalCoroutinesApi
     fun oppdater() = runTest {
-        OppdateringService(mockClient, kafkaContainer.kafkaProducer()).oppdater()
+        OppdateringService(mockClient, kafkaContainer.kafkaProducer(klientId = "pia-brreg-oppdaterer")).oppdater()
         withTimeout(Duration.ofSeconds(10)) {
             while (this.isActive) {
                 val records = konsument.poll(Duration.ofMillis(100))

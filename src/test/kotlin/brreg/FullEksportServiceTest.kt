@@ -63,7 +63,7 @@ internal class FullEksportServiceTest {
                 }
             }
 
-            konsument = kafkaContainer.kafkaKonsument()
+            konsument = kafkaContainer.kafkaKonsument(klientId = "pia-brreg-alle-virksomheter")
             konsument.subscribe(listOf(KAFKA_TOPIC_ALLE_VIRKSOMHETER))
         }
 
@@ -122,7 +122,7 @@ internal class FullEksportServiceTest {
     @Test
     @ExperimentalCoroutinesApi
     fun lastNedAlleVirksomheter() = runTest {
-        FullEksportService(mockEngine, kafkaContainer.kafkaProducer()).lastNed()
+        FullEksportService(mockEngine, kafkaContainer.kafkaProducer(klientId = "pia-brreg-alle-virksomheter")).lastNed()
         withTimeout(Duration.ofSeconds(10)) {
             while (this.isActive) {
                 val records = konsument.poll(Duration.ofMillis(100))

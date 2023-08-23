@@ -22,7 +22,6 @@ import org.testcontainers.utility.DockerImageName
 
 class KafkaContainerHelper {
     companion object {
-        const val CLIENT_ID = "pia-brreg"
         const val GROUP_ID = "pia-brreg"
 
         private var adminClient: AdminClient
@@ -44,7 +43,7 @@ class KafkaContainerHelper {
             adminClient.createTopics(newTopics)
         }
 
-        fun KafkaContainer.kafkaProducer() = object : KafkaProdusent {
+        fun KafkaContainer.kafkaProducer(klientId: String) = object : KafkaProdusent {
             private val produsent = KafkaProducer<String, String>(
                 mapOf(
                     ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to this@kafkaProducer.bootstrapServers,
@@ -52,7 +51,7 @@ class KafkaContainerHelper {
                     ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
                     ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true, // Den sikrer rekkefølge
                     ProducerConfig.ACKS_CONFIG to "all", // Den sikrer at data ikke mistes
-                    ProducerConfig.CLIENT_ID_CONFIG to CLIENT_ID,
+                    ProducerConfig.CLIENT_ID_CONFIG to klientId,
                 )
             )
 
@@ -63,13 +62,13 @@ class KafkaContainerHelper {
             }
         }
 
-        fun KafkaContainer.kafkaKonsument() = KafkaConsumer<String, String>(
+        fun KafkaContainer.kafkaKonsument(klientId: String) = KafkaConsumer<String, String>(
             mapOf(
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to this.bootstrapServers,
                 ConsumerConfig.GROUP_ID_CONFIG to GROUP_ID,
-                ConsumerConfig.CLIENT_ID_CONFIG to CLIENT_ID,
+                ConsumerConfig.CLIENT_ID_CONFIG to klientId,
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
                 ConsumerConfig.MAX_POLL_RECORDS_CONFIG to "1000",
                 CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to "PLAINTEXT",
