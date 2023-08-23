@@ -17,7 +17,7 @@ spec:
       external:
         - host: data.brreg.no
   kafka:
-    pool: nav-dev # nav-dev / nav-prod
+    pool: {{ kafka-pool }} # nav-dev / nav-prod
   env:
     - name: LAST_NED_ALLE_VIRKSOMHETER
       value: "true"
