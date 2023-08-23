@@ -6,7 +6,7 @@ metadata:
   name: brreg-alle-virksomheter
   namespace: pia
 spec:
-  image: ghcr.io/navikt/pia-brreg-oppdaterer:latest
+  image: {{ image }}
   resources:
     requests:
       memory: 1Gi
