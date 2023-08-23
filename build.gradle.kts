@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.kotlinToolingVersion
+
 plugins {
     application
     kotlin("jvm") version "1.9.0"
@@ -15,6 +17,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     val ktorVersion = "2.3.3"
+    implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")

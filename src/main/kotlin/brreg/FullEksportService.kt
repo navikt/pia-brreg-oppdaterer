@@ -5,6 +5,9 @@ import com.google.gson.stream.JsonReader
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.HttpTimeout.Plugin.INFINITE_TIMEOUT_MS
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -32,7 +35,12 @@ class FullEksportService(
 
     private val url: String = "https://data.brreg.no/enhetsregisteret/api/underenheter/lastned"
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
-    private val httpClient = HttpClient(engine) { }
+    private val httpClient = HttpClient(engine) {
+        install(HttpTimeout) {
+            requestTimeoutMillis = INFINITE_TIMEOUT_MS
+        }
+        install(Logging)
+    }
 
     init {
         Runtime.getRuntime().addShutdownHook(Thread {
@@ -83,9 +91,14 @@ class FullEksportService(
                         feilendeBedrifter++
                         log.debug("Skipper lagring av virksomhet da den er null fra JsonReader")
                     }
+
                     else -> {
                         try {
-                            kafkaProdusent.sendMelding(Miljø.KAFKA_TOPIC_ALLE_VIRKSOMHETER, brregVirksomhet.organisasjonsnummer, Json.encodeToString(brregVirksomhet))
+                            kafkaProdusent.sendMelding(
+                                Miljø.KAFKA_TOPIC_ALLE_VIRKSOMHETER,
+                                brregVirksomhet.organisasjonsnummer,
+                                Json.encodeToString(brregVirksomhet)
+                            )
                             importerteBedrifter++
                         } catch (e: Exception) {
                             feilendeBedrifter++
