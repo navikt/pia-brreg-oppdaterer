@@ -5,8 +5,13 @@ on:
       - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+permissions: {}
+
 jobs:
   build:
+    permissions:
+      packages: write
     name: Bygg og push docker image
     runs-on: "ubuntu-latest"
     permissions:
@@ -55,7 +60,7 @@ jobs:
         env:
           APIKEY: "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           CLUSTER: "dev-gcp"
-          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
+          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml,.nais/topics/topic-brreg-alle-virksomheter.yaml"
           VARS: ".nais/dev.yaml"
   deployTopicsToProd:
     name: "Deploy topics to prod"
@@ -68,7 +73,7 @@ jobs:
         env:
           APIKEY: "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           CLUSTER: "prod-gcp"
-          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml"
+          RESOURCE: ".nais/topics/topic-brreg-oppdatering.yaml,.nais/topics/topic-brreg-alle-virksomheter.yaml"
           VARS: ".nais/prod.yaml"
   deploy-dev:
     name: Deploy NaisJob til NAIS dev
@@ -94,3 +99,19 @@ jobs:
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/deploy.yaml"
           "VARS": ".nais/prod.yaml"
+
+  deploy-engangsjob:
+    strategy:
+      matrix:
+        cluster: [dev, prod]
+    name: Deploy av alle virksomheter import
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "${{ matrix.cluster }}-gcp"
+          "RESOURCE": ".nais/runner_brreg_alle_virksomheter.yaml"
+          "VARS": ".nais/${{ matrix.cluster }}.yaml"

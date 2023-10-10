@@ -1,6 +1,6 @@
 package brreg
 
-import brreg.Miljø.KAFKA_TOPIC
+import brreg.Miljø.KAFKA_TOPIC_OPPDATERINGER
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -43,7 +43,7 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
                 endringstidspunkt = enhet.dato,
                 metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer }
             )
-            kafkaProdusent.sendMelding(KAFKA_TOPIC, enhet.organisasjonsnummer, Json.encodeToString(melding))
+            kafkaProdusent.sendMelding(KAFKA_TOPIC_OPPDATERINGER, enhet.organisasjonsnummer, Json.encodeToString(melding))
             logger.info("Sendte oppdatering på ${enhet.organisasjonsnummer} på Kafka for dato ${enhet.dato}")
         }
     }

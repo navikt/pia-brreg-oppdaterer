@@ -12,6 +12,7 @@ interface BrregApi {
 data class BrregVirksomhetDto(
     val organisasjonsnummer: String,
     val navn: String,
+    val oppstartsdato: String? = null,
     val beliggenhetsadresse: Beliggenhetsadresse? = null,
     val naeringskode1: NæringsundergruppeBrreg? = null,
     val naeringskode2: NæringsundergruppeBrreg? = null,
