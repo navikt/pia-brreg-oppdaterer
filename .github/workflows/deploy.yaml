@@ -48,6 +48,14 @@ jobs:
           platforms: "linux/amd64,linux/arm64"
           push: true
           tags: ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}
+      - name: "Pusher image til GCR"
+        uses: "nais/docker-build-push@v0"
+        id: docker-push
+        with:
+          team: pia
+          pull: true
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
   deployTopicsToDev:
     name: "Deploy topics to dev"
     runs-on: "ubuntu-latest"
