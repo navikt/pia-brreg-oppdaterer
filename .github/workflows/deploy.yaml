@@ -141,6 +141,11 @@ jobs:
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+      - name: Upload Trivy scan artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-report
+          path: 'trivy-results.sarif'
 
   deploy-engangsjob:
     strategy:
