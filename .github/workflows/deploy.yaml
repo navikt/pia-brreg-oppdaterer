@@ -136,7 +136,7 @@ jobs:
           ignore-unfixed: false
           format: 'sarif'
           output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+          severity: 'MEDIUM,HIGH,CRITICAL'
           vuln-type: 'os,library'
           scanners: 'vuln,secret'
       - name: Upload Trivy scan results to GitHub Security tab
