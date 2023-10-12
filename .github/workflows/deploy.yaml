@@ -135,6 +135,7 @@ jobs:
           image-ref: ${{ needs.build.outputs.image }}
           ignore-unfixed: false # Vi vil se alle sårbarheter, også de som ikke er fikset
           vuln-type: 'os,library'
+          limit-severities-for-sarif: true
           severity: 'MEDIUM,HIGH,CRITICAL' # Prøver å filtrere bort lave og uklassifiserte sårbarheter
           format: 'sarif'
           output: 'trivy-results.sarif' # Filen som genereres av trivy brukes i de neste stegene
