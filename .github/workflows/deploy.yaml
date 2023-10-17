@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - "main"
-env:
-  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 
 permissions: {}
 
@@ -42,14 +40,7 @@ jobs:
           "registry": "ghcr.io"
           "username": "${{ github.actor }}"
           "password": "${{ secrets.GITHUB_TOKEN }}"
-      - name: "Build and push the Docker image"
-        uses: "docker/build-push-action@v3"
-        with:
-          context: .
-          platforms: "linux/amd64,linux/arm64"
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest,${{ env.IMAGE }}
-      - name: "Pusher image til GCR"
+      - name: "Build and push Docker image til GCR "
         uses: "nais/docker-build-push@v0"
         id: docker-push
         with:
@@ -94,6 +85,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
         env:
+          "IMAGE": "${{ needs.build.outputs.image }}"
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/deploy.yaml"
@@ -106,6 +98,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
         env:
+          "IMAGE": "${{ needs.build.outputs.image }}"
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/deploy.yaml"
