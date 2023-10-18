@@ -105,14 +105,15 @@ jobs:
           VARS: .nais/prod.yaml
 
   trivy-scan:
+    name: Scanner docker image med Trivy
     needs: build
     permissions:
-      contents: write # to write sarif
+      contents: read # to write sarif
       security-events: write # push sarif to github security
       id-token: write # for nais/login
     runs-on: ubuntu-latest
     steps:
-      - uses: navikt/pia-actions/trivy-scan@v1.1.1
+      - uses: navikt/pia-actions/trivy-scan@v1 # https://github.com/navikt/pia-actions/tree/main/trivy-scan
         with:
           image: ${{ needs.build.outputs.image }}
           team: pia
