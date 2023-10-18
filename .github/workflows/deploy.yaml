@@ -107,7 +107,7 @@ jobs:
   trivy-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: navikt/pia-actions/trivy-scan@master
+      - uses: navikt/pia-actions/trivy-scan@v1.0.1
         with:
           image: ${{ needs.build.outputs.image }}
           team: pia
