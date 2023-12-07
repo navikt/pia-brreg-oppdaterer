@@ -27,7 +27,7 @@ class KafkaContainerHelper {
         private var adminClient: AdminClient
 
         val kafkaContainer = KafkaContainer(
-            DockerImageName.parse("confluentinc/cp-kafka:7.2.2")
+            DockerImageName.parse("confluentinc/cp-kafka:7.4.3")
         )
             .waitingFor(HostPortWaitStrategy())
             .apply {
