@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "1.9.23"
     kotlin("plugin.serialization") version "1.9.22"
 }
 
@@ -14,26 +14,26 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-    val ktorVersion = "2.3.8"
+    val ktorVersion = "2.3.9"
     implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:3.6.1")
-    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("org.apache.kafka:kafka-clients:3.7.0")
+    implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    val testcontainersVersion = "1.19.4"
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    val testcontainersVersion = "1.19.7"
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    val kotestVersion = "5.8.0"
+    val kotestVersion = "5.8.1"
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
 
@@ -48,6 +48,12 @@ dependencies {
                     introdusert gjennom io.kotest:kotest-assertions-json:5.8.0
                 """.trimIndent()
             )
+        }
+        testImplementation("org.apache.commons:commons-compress") {
+            version {
+                require("1.26.1")
+            }
+            because("testcontainers har sårbar versjon")
         }
     }
 }
