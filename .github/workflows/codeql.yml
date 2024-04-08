@@ -66,11 +66,3 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:java"
-
-    - name: Logger inn på Google Artifact Registry
-      uses: nais/login@v0
-      id: login
-      with:
-        team: pia
-        project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-        identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
