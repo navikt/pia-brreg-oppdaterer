@@ -1,7 +1,7 @@
 plugins {
     application
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.serialization") version "1.9.23"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 group = "no.navikt"
@@ -33,7 +33,7 @@ dependencies {
     val testcontainersVersion = "1.19.8"
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    val kotestVersion = "5.9.0"
+    val kotestVersion = "5.9.1"
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
 
