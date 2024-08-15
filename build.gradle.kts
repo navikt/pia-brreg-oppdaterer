@@ -21,7 +21,11 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:3.7.0")
+    implementation("org.apache.kafka:kafka-clients:3.8.0")
+    // -- denne trengs av kafka-client:3.8.0
+    implementation("com.github.luben:zstd-jni:1.5.6-4")
+    // --
+
     implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
     implementation("com.google.code.gson:gson:2.11.0")
