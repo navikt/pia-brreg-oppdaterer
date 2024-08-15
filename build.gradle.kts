@@ -36,6 +36,7 @@ dependencies {
     val kotestVersion = "5.9.1"
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
+    testImplementation("org.wiremock:wiremock-standalone:3.9.1")
 
     constraints {
         testImplementation("org.apache.commons:commons-compress") {

@@ -15,6 +15,8 @@ object Miljø {
     )
     val BRREG_UNDERENHET_URL =
         getEnvVar(envVar = "BRREG_UNDERENHET_URL", default = "https://data.brreg.no/enhetsregisteret/api/underenheter")
+    val FULL_EKSPORT_URL =
+        getEnvVar("FULL_EKSPORT_URL", default = "https://data.brreg.no/enhetsregisteret/api/underenheter/lastned")
     val KAFKA_BROKERS = getEnvVar(envVar = "KAFKA_BROKERS", default = "")
     val KAFKA_TRUSTSTORE_PATH = getEnvVar(envVar = "KAFKA_TRUSTSTORE_PATH", default = "")
     val KAFKA_KEYSTORE_PATH = getEnvVar(envVar = "KAFKA_KEYSTORE_PATH", default = "")

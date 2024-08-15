@@ -1,0 +1,84 @@
+[
+  {
+    "organisasjonsnummer": "123456789",
+    "navn": "Virksomhet",
+    "organisasjonsform": {
+      "kode": "BEDR",
+      "beskrivelse": "Underenhet til næringsdrivende og offentlig forvaltning",
+      "_links": {
+        "self": {
+          "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/BEDR"
+        }
+      }
+    },
+    "registreringsdatoEnhetsregisteret": "2017-07-08",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+      "beskrivelse": "Arkitekttjenester vedrørende byggverk",
+      "kode": "71.112"
+    },
+    "antallAnsatte": 2,
+    "overordnetEnhet": "999999999",
+    "oppstartsdato": "2017-06-14",
+    "beliggenhetsadresse": {
+      "land": "Norge",
+      "landkode": "NO",
+      "postnummer": "1383",
+      "poststed": "ASKER",
+      "adresse": [
+        "Adresse 1"
+      ],
+      "kommune": "ASKER",
+      "kommunenummer": "3025"
+    },
+    "_links": {
+      "self": {
+        "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/123456789"
+      },
+      "overordnetEnhet": {
+        "href": "https://data.brreg.no/enhetsregisteret/api/enheter/999999999"
+      }
+    }
+  },
+  {
+    "organisasjonsnummer": "987654321",
+    "navn": "Virksomhet",
+    "organisasjonsform": {
+      "kode": "BEDR",
+      "beskrivelse": "Underenhet til næringsdrivende og offentlig forvaltning",
+      "_links": {
+        "self": {
+          "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/BEDR"
+        }
+      }
+    },
+    "registreringsdatoEnhetsregisteret": "2017-07-08",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+      "beskrivelse": "Arkitekttjenester vedrørende byggverk",
+      "kode": "71.112"
+    },
+    "antallAnsatte": 2,
+    "overordnetEnhet": "999999999",
+    "oppstartsdato": "2017-06-14",
+    "beliggenhetsadresse": {
+      "land": "Norge",
+      "landkode": "NO",
+      "postnummer": "1383",
+      "poststed": "ASKER",
+      "adresse": [
+        "Adresse 1"
+      ],
+      "kommune": "ASKER",
+      "kommunenummer": "3025"
+    },
+    "_links": {
+      "self": {
+        "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/987654321"
+      },
+      "overordnetEnhet": {
+        "href": "https://data.brreg.no/enhetsregisteret/api/enheter/999999999"
+      }
+    }
+  }
+]

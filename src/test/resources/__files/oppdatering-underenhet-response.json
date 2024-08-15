@@ -1,0 +1,136 @@
+{
+  "_embedded": {
+    "oppdaterteUnderenheter": [
+      {
+        "oppdateringsid": 14757180,
+        "dato": "2022-07-05T04:01:39.613Z",
+        "organisasjonsnummer": "111111111",
+        "endringstype": "Fjernet",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/111111111"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757184,
+        "dato": "2022-07-05T04:01:39.616Z",
+        "organisasjonsnummer": "222222222",
+        "endringstype": "Sletting",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/222222222"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757185,
+        "dato": "2022-07-05T04:01:39.616Z",
+        "organisasjonsnummer": "333333333",
+        "endringstype": "Endring",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/333333333"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757189,
+        "dato": "2022-07-05T04:01:39.625Z",
+        "organisasjonsnummer": "444444444",
+        "endringstype": "Sletting",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/444444444"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757191,
+        "dato": "2022-07-05T04:02:01.793Z",
+        "organisasjonsnummer": "555555555",
+        "endringstype": "Sletting",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/555555555"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757192,
+        "dato": "2022-07-05T04:02:01.793Z",
+        "organisasjonsnummer": "666666666",
+        "endringstype": "Endring",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/666666666"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757196,
+        "dato": "2022-07-05T04:02:01.797Z",
+        "organisasjonsnummer": "777777777",
+        "endringstype": "Sletting",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/777777777"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757197,
+        "dato": "2022-07-05T04:02:01.797Z",
+        "organisasjonsnummer": "888888888",
+        "endringstype": "Endring",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/888888888"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757202,
+        "dato": "2022-07-05T04:02:01.805Z",
+        "organisasjonsnummer": "999999999",
+        "endringstype": "Endring",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/999999999"
+          }
+        }
+      },
+      {
+        "oppdateringsid": 14757205,
+        "dato": "2022-07-05T04:02:01.808Z",
+        "organisasjonsnummer": "123456789",
+        "endringstype": "Sletting",
+        "_links": {
+          "underenhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/underenheter/123456789"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "first": {
+      "href": "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=2022-07-05T00:00:00.000Z&page=0&size=10"
+    },
+    "self": {
+      "href": "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=2022-07-05T00:00:00.000Z&size=10"
+    },
+    "next": {
+      "href": "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=2022-07-05T00:00:00.000Z&page=1&size=10"
+    },
+    "last": {
+      "href": "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=2022-07-05T00:00:00.000Z&page=89&size=10"
+    }
+  },
+  "page": {
+    "size": 10,
+    "totalElements": 10,
+    "totalPages": 1,
+    "number": 0
+  }
+}

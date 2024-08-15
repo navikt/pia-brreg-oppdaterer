@@ -1,0 +1,13 @@
+{
+  "request" : {
+    "url" : "/enhetsregisteret/api/underenheter/lastned",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName": "lastned-alle-response.json.gz",
+    "headers" : {
+      "Content-Type" : "application/vnd.brreg.enhetsregisteret.underenhet.v1+gzip;charset=UTF-8"
+    }
+  }
+}

@@ -2,15 +2,17 @@ package brreg
 
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.HttpTimeout.Plugin.INFINITE_TIMEOUT_MS
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.statement.readBytes
+import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
@@ -21,7 +23,12 @@ import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.zip.GZIPInputStream
-import kotlin.io.path.*
+import kotlin.io.path.bufferedWriter
+import kotlin.io.path.createTempFile
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.fileSize
+import kotlin.io.path.inputStream
+import kotlin.io.path.writeBytes
 
 // Ref: https://data.brreg.no/enhetsregisteret/api/docs/index.html#enheter-lastned
 class FullEksportService(
@@ -33,7 +40,7 @@ class FullEksportService(
         var KJØRER_IMPORT = AtomicBoolean(false)
     }
 
-    private val url: String = "https://data.brreg.no/enhetsregisteret/api/underenheter/lastned"
+    private val url: String = Miljø.FULL_EKSPORT_URL
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
     private val httpClient = HttpClient(engine) {
         install(HttpTimeout) {
