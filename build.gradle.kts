@@ -1,7 +1,7 @@
 plugins {
     application
-    kotlin("jvm") version "2.0.10"
-    kotlin("plugin.serialization") version "2.0.10"
+    kotlin("jvm") version "2.0.20"
+    kotlin("plugin.serialization") version "2.0.20"
 }
 
 group = "no.navikt"
@@ -26,15 +26,15 @@ dependencies {
     implementation("com.github.luben:zstd-jni:1.5.6-4")
     // --
 
-    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("ch.qos.logback:logback-classic:1.5.8")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
     implementation("com.google.code.gson:gson:2.11.0")
 
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
-    val testcontainersVersion = "1.20.1"
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    val testcontainersVersion = "1.20.2"
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:kafka:$testcontainersVersion")
     val kotestVersion = "5.9.1"
@@ -45,7 +45,7 @@ dependencies {
     constraints {
         testImplementation("org.apache.commons:commons-compress") {
             version {
-                require("1.27.0")
+                require("1.27.1")
             }
             because("testcontainers har sårbar versjon")
         }
