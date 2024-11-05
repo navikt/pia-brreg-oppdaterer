@@ -6,7 +6,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.HttpTimeout.Plugin.INFINITE_TIMEOUT_MS
+import io.ktor.client.plugins.HttpTimeoutConfig.Companion.INFINITE_TIMEOUT_MS
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
