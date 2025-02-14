@@ -1,7 +1,7 @@
 plugins {
     application
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 group = "no.navikt"
@@ -13,8 +13,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
-    val ktorVersion = "3.0.3"
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+    val ktorVersion = "3.1.0"
     implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -26,9 +26,9 @@ dependencies {
     implementation("com.github.luben:zstd-jni:1.5.6-4")
     // --
 
-    implementation("ch.qos.logback:logback-classic:1.5.15")
+    implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.code.gson:gson:2.12.1")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
@@ -40,7 +40,7 @@ dependencies {
     val kotestVersion = "5.9.1"
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
-    testImplementation("org.wiremock:wiremock-standalone:3.10.0")
+    testImplementation("org.wiremock:wiremock-standalone:3.12.0")
 
     constraints {
         testImplementation("org.apache.commons:commons-compress") {
