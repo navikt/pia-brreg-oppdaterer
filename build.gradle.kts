@@ -30,7 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:3.9.0")
+    implementation("org.apache.kafka:kafka-clients:4.0.0")
     // -- denne trengs av kafka-client:3.8.0
     implementation("com.github.luben:zstd-jni:1.5.6-4")
     // --
