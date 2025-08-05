@@ -1,7 +1,7 @@
 val gsonVersion = "2.13.1"
-val junitJupiterVersion = "5.13.2"
+val junitJupiterVersion = "5.13.4"
 val kotestVersion = "5.9.1"
-val ktorVersion = "3.2.0"
+val ktorVersion = "3.2.3"
 val kotlinxCoroutinesTestVersion = "1.10.2"
 val logbackClassicVersion = "1.5.18"
 val logbackEncoderVersion = "8.1"
@@ -52,7 +52,7 @@ dependencies {
     constraints {
         testImplementation("org.apache.commons:commons-compress") {
             version {
-                require("1.27.1")
+                require("1.28.0")
             }
             because("testcontainers har sårbar versjon")
         }
