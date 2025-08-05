@@ -50,6 +50,14 @@ dependencies {
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
 
     constraints {
+        implementation("net.minidev:json-smart") {
+            version {
+                require("2.5.2")
+            }
+            because(
+                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest-assertions-json:5.9.1",
+            )
+        }
         testImplementation("org.apache.commons:commons-compress") {
             version {
                 require("1.28.0")
