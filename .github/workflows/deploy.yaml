@@ -90,3 +90,22 @@ jobs:
         with:
           image: ${{ needs.build.outputs.image }}
           team: pia
+
+  deploy-engangsjob:
+    strategy:
+      matrix:
+        cluster: [prod]
+    permissions:
+      id-token: write
+    name: Deploy av alle virksomheter import
+    if: github.ref == 'refs/heads/engangsjobb'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          IMAGE: ${{ needs.build.outputs.image }}
+          CLUSTER: ${{ matrix.cluster }}-gcp
+          RESOURCE: .nais/brreg_alle_virksomheter.yaml
+          VARS: .nais/${{ matrix.cluster }}.yaml
