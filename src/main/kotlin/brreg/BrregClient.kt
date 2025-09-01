@@ -15,37 +15,51 @@ import java.time.format.DateTimeFormatter
 
 const val SØKE_STØRRELSE = 100
 
-class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
+class BrregClient(
+    engine: HttpClientEngine = CIO.create(),
+) : BrregApi {
     private val logger = LoggerFactory.getLogger(this::class.java)
-    private val httpClient = HttpClient(engine) {
-        install(ContentNegotiation) {
-            json(json = Json(builderAction = {
-                ignoreUnknownKeys = true
-            }))
+    private val httpClient =
+        HttpClient(engine) {
+            install(ContentNegotiation) {
+                json(
+                    json =
+                        Json(builderAction = {
+                            ignoreUnknownKeys = true
+                        }),
+                )
+            }
         }
-    }
 
     init {
-        Runtime.getRuntime().addShutdownHook(Thread {
-            println("HttpClient closing...")
-            httpClient.close()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                println("HttpClient closing...")
+                httpClient.close()
+            },
+        )
     }
 
-    override suspend fun hentOppdaterteUnderenheter(tidspunkt: ZonedDateTime, oppdateringsId: Long?, side: Int): BrregOppdateringDTO {
-        val startFilter = if(oppdateringsId != null) {
-            "oppdateringsid=$oppdateringsId"
-        } else {
-            "dato=${tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))}"
-        }
+    override suspend fun hentOppdaterteUnderenheter(
+        tidspunkt: ZonedDateTime,
+        oppdateringsId: Long?,
+        side: Int,
+    ): BrregOppdateringDTO {
+        val startFilter =
+            if (oppdateringsId != null) {
+                "oppdateringsid=$oppdateringsId"
+            } else {
+                "dato=${tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))}"
+            }
         val url = "${Miljø.BRREG_OPPDATERING_UNDERENHET_URL}?$startFilter&size=$SØKE_STØRRELSE&page=$side"
         val response = httpClient.get(url)
-        val brregOppdateringDTO = try {
-            response.body<BrregOppdateringDTO>()
-        } catch (e: Exception) {
-            logger.warn("Feil ved å hente følgende URL '$url'")
-            throw e
-        }
+        val brregOppdateringDTO =
+            try {
+                response.body<BrregOppdateringDTO>()
+            } catch (e: Exception) {
+                logger.warn("Feil ved å hente følgende URL '$url'")
+                throw e
+            }
         return brregOppdateringDTO
     }
 
@@ -62,8 +76,10 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
 private data class BrregUnderenheterResponsDTO(
     val _embedded: BrregUnderenheterEmbeddedDTO,
     val _links: LinksDTO,
-    val page: PageDTO
+    val page: PageDTO,
 )
 
 @Serializable
-private data class BrregUnderenheterEmbeddedDTO(val underenheter: List<BrregVirksomhetDto>)
+private data class BrregUnderenheterEmbeddedDTO(
+    val underenheter: List<BrregVirksomhetDto>,
+)

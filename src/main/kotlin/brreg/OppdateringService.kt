@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-class OppdateringService(private val brregApi: BrregApi, private val kafkaProdusent: KafkaProdusent) {
+class OppdateringService(
+    private val brregApi: BrregApi,
+    private val kafkaProdusent: KafkaProdusent,
+) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     suspend fun oppdater() {
@@ -26,23 +29,27 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
             }
             skalSøkeMer = page.number != (page.totalPages - 1)
             side += 1
-            if(side > 99) {
+            if (side > 99) {
                 side = 0
                 oppdateringsId = _embedded.oppdaterteUnderenheter.last().oppdateringsid
             }
         }
     }
 
-    private suspend fun sendTilKafka(endringstype: Endringstype, enheter: List<OppdateringDTO>) {
+    private suspend fun sendTilKafka(
+        endringstype: Endringstype,
+        enheter: List<OppdateringDTO>,
+    ) {
         val underenheterFraBrreg = hentEndredeUnderenheter(endringstype, enheter)
         enheter.forEach { enhet ->
-            val melding = OppdateringVirksomhet(
-                oppdateringsid = enhet.oppdateringsid,
-                orgnummer = enhet.organisasjonsnummer,
-                endringstype = endringstype,
-                endringstidspunkt = enhet.dato,
-                metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer }
-            )
+            val melding =
+                OppdateringVirksomhet(
+                    oppdateringsid = enhet.oppdateringsid,
+                    orgnummer = enhet.organisasjonsnummer,
+                    endringstype = endringstype,
+                    endringstidspunkt = enhet.dato,
+                    metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer },
+                )
             kafkaProdusent.sendMelding(KAFKA_TOPIC_OPPDATERINGER, enhet.organisasjonsnummer, Json.encodeToString(melding))
             logger.info("Sendte oppdatering på ${enhet.organisasjonsnummer} på Kafka for dato ${enhet.dato}")
         }
@@ -50,13 +57,15 @@ class OppdateringService(private val brregApi: BrregApi, private val kafkaProdus
 
     private suspend fun hentEndredeUnderenheter(
         endringstype: Endringstype,
-        enheter: List<OppdateringDTO>
+        enheter: List<OppdateringDTO>,
     ): List<BrregVirksomhetDto> {
-        val underenheterFraBrreg = when (endringstype) {
-            Endringstype.Sletting,
-            Endringstype.Fjernet -> emptyList()
-            else -> brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
-        }
+        val underenheterFraBrreg =
+            when (endringstype) {
+                Endringstype.Sletting,
+                Endringstype.Fjernet,
+                -> emptyList()
+                else -> brregApi.hentUnderenheter(enheter.map { it.organisasjonsnummer })
+            }
         return underenheterFraBrreg
     }
 }
@@ -67,6 +76,5 @@ internal data class OppdateringVirksomhet(
     val orgnummer: String,
     val endringstype: Endringstype,
     val metadata: BrregVirksomhetDto? = null,
-    val endringstidspunkt: Instant
+    val endringstidspunkt: Instant,
 )
-

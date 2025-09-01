@@ -36,24 +36,27 @@ class FullEksportService(
     private val kafkaProdusent: KafkaProdusent,
 ) {
     companion object {
-        val CONTENT_TYPE: String = "application/vnd.brreg.enhetsregisteret.underenhet.v1+gzip;charset=UTF-8"
+        @Suppress("ktlint:standard:property-naming")
         var KJØRER_IMPORT = AtomicBoolean(false)
     }
 
     private val url: String = Miljø.FULL_EKSPORT_URL
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
-    private val httpClient = HttpClient(engine) {
-        install(HttpTimeout) {
-            requestTimeoutMillis = INFINITE_TIMEOUT_MS
+    private val httpClient =
+        HttpClient(engine) {
+            install(HttpTimeout) {
+                requestTimeoutMillis = INFINITE_TIMEOUT_MS
+            }
+            install(Logging)
         }
-        install(Logging)
-    }
 
     init {
-        Runtime.getRuntime().addShutdownHook(Thread {
-            println("HttpClient closing...")
-            httpClient.close()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                println("HttpClient closing...")
+                httpClient.close()
+            },
+        )
     }
 
     suspend fun lastNed() {
@@ -67,11 +70,7 @@ class FullEksportService(
     }
 
     private suspend fun lastNedUnderEnheterSomZip(): ByteArray {
-        val response = httpClient.get(url) {
-            headers {
-                append(HttpHeaders.Accept, CONTENT_TYPE)
-            }
-        }
+        val response = httpClient.get(url)
 
         return if (response.status.isSuccess()) {
             val bytes = response.readBytes()
@@ -104,7 +103,7 @@ class FullEksportService(
                             kafkaProdusent.sendMelding(
                                 Miljø.KAFKA_TOPIC_ALLE_VIRKSOMHETER,
                                 brregVirksomhet.organisasjonsnummer,
-                                Json.encodeToString(brregVirksomhet)
+                                Json.encodeToString(brregVirksomhet),
                             )
                             importerteBedrifter++
                         } catch (e: Exception) {
@@ -139,13 +138,13 @@ class FullEksportService(
         return ukomprimertFil
     }
 
-    private fun lagreTilFil(filinnhold: ByteArray, filnavn: String) =
-        createTempFile(
-            prefix = "${System.currentTimeMillis()}",
-            suffix = filnavn
-        ).also { file -> file.writeBytes(filinnhold) }
-
+    private fun lagreTilFil(
+        filinnhold: ByteArray,
+        filnavn: String,
+    ) = createTempFile(
+        prefix = "${System.currentTimeMillis()}",
+        suffix = filnavn,
+    ).also { file -> file.writeBytes(filinnhold) }
 }
-
 
 fun Path.sizeInMb() = this.fileSize() / 1024 / 1024
