@@ -3,6 +3,7 @@ package brreg
 import TestContainersHelper
 import TestContainersHelper.kafkaContainerHelper
 import brreg.Miljø.KAFKA_TOPIC_ALLE_VIRKSOMHETER
+import io.kotest.inspectors.forExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -45,6 +46,14 @@ class FullEksportServiceTest {
                             melding.organisasjonsnummer.shouldNotBeNull()
                             melding.naeringskode1?.kode shouldBe "71.112"
                             melding.oppstartsdato shouldMatch "\\d{4}-\\d{2}-\\d{2}"
+                        }
+                        records.toList().forExactly(1) {
+                            val melding = Json.decodeFromString<BrregVirksomhetDto>(it.value())
+                            melding.beliggenhetsadresse.shouldNotBeNull()
+                        }
+                        records.toList().forExactly(1) {
+                            val melding = Json.decodeFromString<BrregVirksomhetDto>(it.value())
+                            melding.postadresse.shouldNotBeNull()
                         }
                         break
                     }

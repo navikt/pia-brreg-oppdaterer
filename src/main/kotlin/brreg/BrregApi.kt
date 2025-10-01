@@ -15,13 +15,14 @@ interface BrregApi {
 
 @Serializable
 data class BrregVirksomhetDto(
-    val organisasjonsnummer: String,
-    val navn: String,
-    val oppstartsdato: String? = null,
-    val beliggenhetsadresse: Beliggenhetsadresse? = null,
-    val naeringskode1: NæringsundergruppeBrreg? = null,
-    val naeringskode2: NæringsundergruppeBrreg? = null,
-    val naeringskode3: NæringsundergruppeBrreg? = null,
+	val organisasjonsnummer: String,
+	val navn: String,
+	val oppstartsdato: String? = null,
+	val beliggenhetsadresse: Adresse? = null,
+	val postadresse: Adresse? = null,
+	val naeringskode1: NæringsundergruppeBrreg? = null,
+	val naeringskode2: NæringsundergruppeBrreg? = null,
+	val naeringskode3: NæringsundergruppeBrreg? = null,
 )
 
 @Serializable
@@ -31,7 +32,7 @@ data class NæringsundergruppeBrreg(
 )
 
 @Serializable
-data class Beliggenhetsadresse(
+data class Adresse(
     val land: String? = null,
     val landkode: String? = null,
     val postnummer: String? = null,
