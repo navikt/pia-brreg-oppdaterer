@@ -1,17 +1,17 @@
-val gsonVersion = "2.13.1"
-val junitJupiterVersion = "5.13.4"
-val kotestVersion = "5.9.1"
-val ktorVersion = "3.2.3"
+val gsonVersion = "2.13.2"
+val junitJupiterVersion = "6.0.1"
+val kotestVersion = "6.0.4"
+val ktorVersion = "3.3.1"
 val kotlinxCoroutinesTestVersion = "1.10.2"
-val logbackClassicVersion = "1.5.18"
-val logbackEncoderVersion = "8.1"
-val testcontainersVersion = "1.21.3"
+val logbackClassicVersion = "1.5.20"
+val logbackEncoderVersion = "9.0"
+val testcontainersVersion = "2.0.1"
 val wiremockVersion = "3.13.1"
 
 plugins {
     application
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.serialization") version "2.2.0"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.serialization") version "2.2.21"
 }
 
 group = "no.navikt"
@@ -30,7 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation("org.apache.kafka:kafka-clients:4.0.0")
+    implementation("org.apache.kafka:kafka-clients:4.1.0")
     // -- denne trengs av kafka-client:3.8.0
     implementation("com.github.luben:zstd-jni:1.5.6-4")
     // --
@@ -44,7 +44,7 @@ dependencies {
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesTestVersion")
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-    testImplementation("org.testcontainers:kafka:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-kafka:$testcontainersVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
@@ -52,17 +52,11 @@ dependencies {
     constraints {
         implementation("net.minidev:json-smart") {
             version {
-                require("2.5.2")
+                require("2.6.0")
             }
             because(
-                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest-assertions-json:5.9.1",
+                "versjoner < 2.5.2 har diverse sårbarheter. Inkludert i kotest-assertions-json:6.0.4",
             )
-        }
-        testImplementation("org.apache.commons:commons-compress") {
-            version {
-                require("1.28.0")
-            }
-            because("testcontainers har sårbar versjon")
         }
     }
 }
