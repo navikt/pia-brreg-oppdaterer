@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pia-brreg-oppdaterer
+  namespace: pia
+  labels:
+    team: pia
+    created-by: pia
+spec:
+  groups:
+    - name: pia-brreg-oppdaterer-alerts
+      rules:
+        - alert: Oppdatering av virksomheter fra Brreg har ikke kjørt
+          expr: time() - max(kube_job_status_completion_time{job_name=~"brreg-oppdaterer.+"}) > 90000
+          annotations:
+            consequence: "brreg-oppdaterer har ikke kjørt det siste døgnet"
+            action: |-
+              Sjekk hva som kan ha gått galt ved å sjekke logger i nais console.
+          labels:
+            namespace: pia
+            severity: warning

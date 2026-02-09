@@ -1,0 +1,24 @@
+name: Deploy alerts to NAIS
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .nais/alerts.yaml
+      - .github/workflows/deploy-alerts.yaml
+
+permissions:
+  id-token: write
+
+jobs:
+  apply-alerts:
+    name: Deploy alerts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: deploy to prod
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/alerts.yaml
