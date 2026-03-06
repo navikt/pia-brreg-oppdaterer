@@ -1,7 +1,7 @@
 package brreg
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 data class OppdateringDTO(
@@ -9,7 +9,7 @@ data class OppdateringDTO(
     val dato: Instant,
     val organisasjonsnummer: String,
     val endringstype: Endringstype,
-    val _links: LinksDTO
+    val _links: LinksDTO,
 )
 
 enum class Endringstype {
@@ -17,5 +17,5 @@ enum class Endringstype {
     Endring, // Enheten har blitt endret i Enhetsregisteret
     Ny, // Enheten har blitt lagt til i Enhetsregisteret
     Sletting, // Enheten har blitt slettet fra Enhetsregisteret
-    Fjernet // Enheten har blitt fjernet fra Åpne Data. Eventuelle kopier skal også fjerne enheten.
+    Fjernet, // Enheten har blitt fjernet fra Åpne Data. Eventuelle kopier skal også fjerne enheten.
 }
