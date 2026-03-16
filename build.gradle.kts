@@ -1,6 +1,6 @@
 val gsonVersion = "2.13.2"
 val junitJupiterVersion = "6.0.3"
-val kotestVersion = "6.1.4"
+val kotestVersion = "6.1.5"
 val ktorVersion = "3.4.0"
 val kotlinxCoroutinesTestVersion = "1.10.2"
 val logbackClassicVersion = "1.5.32"
