@@ -5,13 +5,13 @@ val ktorVersion = "3.4.1"
 val kotlinxCoroutinesTestVersion = "1.10.2"
 val logbackClassicVersion = "1.5.32"
 val logbackEncoderVersion = "9.0"
-val testcontainersVersion = "2.0.3"
+val testcontainersVersion = "2.0.4"
 val wiremockVersion = "3.13.2"
 
 plugins {
     application
-    kotlin("jvm") version "2.3.10"
-    kotlin("plugin.serialization") version "2.3.10"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.serialization") version "2.3.20"
 }
 
 group = "no.navikt"
