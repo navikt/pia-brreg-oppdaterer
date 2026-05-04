@@ -1,17 +1,17 @@
-val gsonVersion = "2.13.2"
+val gsonVersion = "2.14.0"
 val junitJupiterVersion = "6.0.3"
 val kotestVersion = "6.1.11"
-val ktorVersion = "3.4.2"
+val ktorVersion = "3.4.3"
 val kotlinxCoroutinesTestVersion = "1.10.2"
 val logbackClassicVersion = "1.5.32"
 val logbackEncoderVersion = "9.0"
-val testcontainersVersion = "2.0.4"
+val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
 plugins {
     application
-    kotlin("jvm") version "2.3.20"
-    kotlin("plugin.serialization") version "2.3.20"
+    kotlin("jvm") version "2.3.21"
+    kotlin("plugin.serialization") version "2.3.21"
 }
 
 group = "no.navikt"
