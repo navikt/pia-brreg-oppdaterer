@@ -1,17 +1,17 @@
 val gsonVersion = "2.14.0"
-val junitJupiterVersion = "6.0.3"
+val junitJupiterVersion = "6.1.0"
 val kotestVersion = "6.1.11"
-val ktorVersion = "3.4.3"
+val ktorVersion = "3.5.0"
 val kotlinxCoroutinesTestVersion = "1.11.0"
-val logbackClassicVersion = "1.5.32"
+val logbackClassicVersion = "1.5.34"
 val logbackEncoderVersion = "9.0"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
 
 plugins {
     application
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.serialization") version "2.4.0"
 }
 
 group = "no.navikt"
@@ -31,7 +31,7 @@ dependencies {
 
     // Kafka
     implementation("at.yawk.lz4:lz4-java:1.11.0")
-    implementation("org.apache.kafka:kafka-clients:4.2.0") {
+    implementation("org.apache.kafka:kafka-clients:4.3.0") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
     }
