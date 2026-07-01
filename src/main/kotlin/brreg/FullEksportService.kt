@@ -13,10 +13,6 @@ import io.ktor.client.request.headers
 import io.ktor.client.statement.readBytes
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets.UTF_8
@@ -29,8 +25,13 @@ import kotlin.io.path.deleteIfExists
 import kotlin.io.path.fileSize
 import kotlin.io.path.inputStream
 import kotlin.io.path.writeBytes
+import kotlinx.serialization.json.Json
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 // Ref: https://data.brreg.no/enhetsregisteret/api/docs/index.html#enheter-lastned
+const val FULL_EKSPORT_PATH = "enhetsregisteret/api/underenheter/lastned"
+
 class FullEksportService(
     engine: HttpClientEngine = CIO.create(),
     private val kafkaProdusent: KafkaProdusent,
@@ -40,7 +41,7 @@ class FullEksportService(
         var KJØRER_IMPORT = AtomicBoolean(false)
     }
 
-    private val url: String = Miljø.FULL_EKSPORT_URL
+    private val url: String = "${Miljø.BRREG_API_BASE_URL}/$FULL_EKSPORT_PATH"
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
     private val httpClient = HttpClient(engine) {
         install(HttpTimeout) {

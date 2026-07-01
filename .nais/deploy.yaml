@@ -11,7 +11,7 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: "data.brreg.no"
+        - host: "{{brreg-api-host}}"
   kafka:
     pool: {{kafka-pool}}
   observability:
@@ -27,3 +27,5 @@ spec:
   env:
     - name: ANTALL_DAGER_SIDEN_OPPDATERING
       value: "2"
+    - name: BRREG_API_BASE_URL
+      value: "{{brreg-api-base-url}}"
