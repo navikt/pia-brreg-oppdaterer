@@ -19,8 +19,6 @@ class WiremockContainerHelper {
     }
 
     fun envVars() = mapOf(
-        "BRREG_OPPDATERING_UNDERENHET_URL" to "http://host.testcontainers.internal:${brregMock.port()}/enhetsregisteret/api/oppdateringer/underenheter",
-        "BRREG_UNDERENHET_URL" to "http://host.testcontainers.internal:${brregMock.port()}/enhetsregisteret/api/underenheter",
-        "FULL_EKSPORT_URL" to "http://host.testcontainers.internal:${brregMock.port()}/enhetsregisteret/api/underenheter/lastned",
+        "BRREG_API_BASE_URL" to "http://host.testcontainers.internal:${brregMock.port()}",
     )
 }

@@ -7,16 +7,10 @@ import org.apache.kafka.common.serialization.StringSerializer
 import java.io.Serializable
 
 object Miljø {
-    val LAST_NED_ALLE_VIRKSOMHETER = getEnvVar("LAST_NED_ALLE_VIRKSOMHETER", "false")
+    val LAST_NED_ALLE_VIRKSOMHETER = getEnvVar(envVar = "LAST_NED_ALLE_VIRKSOMHETER", default = "false")
     val ANTALL_DAGER_SIDEN_OPPDATERING = getEnvVar(envVar = "ANTALL_DAGER_SIDEN_OPPDATERING", default = "1")
-    val BRREG_OPPDATERING_UNDERENHET_URL = getEnvVar(
-        envVar = "BRREG_OPPDATERING_UNDERENHET_URL",
-        default = "https://data.brreg.no/enhetsregisteret/api/oppdateringer/underenheter"
-    )
-    val BRREG_UNDERENHET_URL =
-        getEnvVar(envVar = "BRREG_UNDERENHET_URL", default = "https://data.brreg.no/enhetsregisteret/api/underenheter")
-    val FULL_EKSPORT_URL =
-        getEnvVar("FULL_EKSPORT_URL", default = "https://data.brreg.no/enhetsregisteret/api/underenheter/lastned")
+    val BRREG_API_BASE_URL = getEnvVar(envVar = "BRREG_API_BASE_URL", default = "https://data.brreg.no")
+
     val KAFKA_BROKERS = getEnvVar(envVar = "KAFKA_BROKERS", default = "")
     val KAFKA_TRUSTSTORE_PATH = getEnvVar(envVar = "KAFKA_TRUSTSTORE_PATH", default = "")
     val KAFKA_KEYSTORE_PATH = getEnvVar(envVar = "KAFKA_KEYSTORE_PATH", default = "")
