@@ -22,15 +22,15 @@ class OppdateringService(
         var side = 0
         while (skalSøkeMer) {
             val (_embedded, _, page) = brregApi.hentOppdaterteUnderenheter(tidspunkt, oppdateringsId, side)
-            val enheterGruppertPåType = _embedded.oppdaterteUnderenheter.groupBy { it.endringstype }
+            val enheterGruppertPåType = (_embedded?.oppdaterteUnderenheter ?: emptyList()).groupBy { it.endringstype }
             enheterGruppertPåType.entries.forEach { (key, value) ->
                 sendTilKafka(endringstype = key, enheter = value)
             }
-            skalSøkeMer = page.number != (page.totalPages - 1)
+            skalSøkeMer = page.totalPages > 0 && page.number != (page.totalPages - 1)
             side += 1
             if (side > 99) {
                 side = 0
-                oppdateringsId = _embedded.oppdaterteUnderenheter.last().oppdateringsid
+                oppdateringsId = _embedded?.oppdaterteUnderenheter?.last()?.oppdateringsid
             }
         }
     }

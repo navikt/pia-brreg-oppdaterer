@@ -18,7 +18,10 @@ const val SØKE_STØRRELSE = 100
 const val BRREG_OPPDATERING_UNDERENHET_PATH = "enhetsregisteret/api/oppdateringer/underenheter"
 const val BRREG_UNDERENHET_PATH = "enhetsregisteret/api/underenheter"
 
-class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
+class BrregClient(
+    engine: HttpClientEngine = CIO.create(),
+    private val baseUrl: String = BRREG_API_BASE_URL,
+) : BrregApi {
     private val logger = LoggerFactory.getLogger(this::class.java)
     private val httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
@@ -45,7 +48,7 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
         } else {
             "dato=${tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))}"
         }
-        val url = "$BRREG_API_BASE_URL/$BRREG_OPPDATERING_UNDERENHET_PATH?$startFilter&size=$SØKE_STØRRELSE&page=$side"
+        val url = "$baseUrl/$BRREG_OPPDATERING_UNDERENHET_PATH?$startFilter&size=$SØKE_STØRRELSE&page=$side"
         val response = httpClient.get(url)
         val brregOppdateringDTO = try {
             response.body<BrregOppdateringDTO>()
@@ -59,7 +62,7 @@ class BrregClient(engine: HttpClientEngine = CIO.create()) : BrregApi {
     override suspend fun hentUnderenheter(orgnummere: List<String>): List<BrregVirksomhetDto> {
         val orgnumreSomString = orgnummere.joinToString(separator = ",")
         val url =
-            "$BRREG_API_BASE_URL/$BRREG_UNDERENHET_PATH?organisasjonsnummer=$orgnumreSomString&size=${orgnummere.size}"
+            "$baseUrl/$BRREG_UNDERENHET_PATH?organisasjonsnummer=$orgnumreSomString&size=${orgnummere.size}"
         val response = httpClient.get(url)
         return response.body<BrregUnderenheterResponsDTO>()._embedded.underenheter
     }
