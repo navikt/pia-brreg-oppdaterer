@@ -1,0 +1,13 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://data.ppe.brreg.no/enhetsregisteret/api/oppdateringer/underenheter?dato=2026-06-29T19:11:37.312Z&size=100&page=0"
+    }
+  },
+  "page": {
+    "size": 100,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
