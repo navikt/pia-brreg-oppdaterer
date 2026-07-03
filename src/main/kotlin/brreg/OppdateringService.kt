@@ -50,8 +50,8 @@ class OppdateringService(
                     metadata = underenheterFraBrreg.find { it.organisasjonsnummer == enhet.organisasjonsnummer },
                 )
             kafkaProdusent.sendMelding(KAFKA_TOPIC_OPPDATERINGER, enhet.organisasjonsnummer, Json.encodeToString(melding))
-            logger.info("Sendte oppdatering på ${enhet.organisasjonsnummer} på Kafka for dato ${enhet.dato}")
         }
+        logger.info("Sendte ${enheter.size} oppdateringer av type $endringstype til Kafka")
     }
 
     private suspend fun hentEndredeUnderenheter(
