@@ -11,6 +11,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.readBytes
+import io.ktor.client.statement.readRawBytes
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import java.io.IOException
@@ -75,7 +76,7 @@ class FullEksportService(
         }
 
         return if (response.status.isSuccess()) {
-            val bytes = response.readBytes()
+            val bytes = response.readRawBytes()
             log.info("Lastet ned komprimert fil med størrelse ${bytes.size / 1024 / 1024} MB")
             bytes
         } else {
