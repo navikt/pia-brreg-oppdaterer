@@ -1,10 +1,10 @@
 val gsonVersion = "2.14.0"
-val junitJupiterVersion = "6.1.2"
+val junitJupiterVersion = "6.1.3"
 val kafkaClientsVersion = "4.3.1"
-val kotestVersion = "6.2.3"
+val kotestVersion = "6.2.4"
 val ktorVersion = "3.5.2"
 val kotlinxCoroutinesTestVersion = "1.11.0"
-val logbackClassicVersion = "1.6.1"
+val logbackClassicVersion = "1.6.3"
 val logbackEncoderVersion = "9.0"
 val testcontainersVersion = "2.0.5"
 val wiremockVersion = "3.13.2"
@@ -31,7 +31,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.11.1")
+    implementation("at.yawk.lz4:lz4-java:1.11.2")
     implementation("org.apache.kafka:kafka-clients:$kafkaClientsVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
