@@ -31,7 +31,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Kafka
-    implementation("at.yawk.lz4:lz4-java:1.13.0")
+    implementation("at.yawk.lz4:lz4-java:1.14.0")
     implementation("org.apache.kafka:kafka-clients:$kafkaClientsVersion") {
         // "Fikser CVE-2025-12183 - lz4-java >1.8.1 har sårbar versjon (transitive dependency fra kafka-clients:4.1.0)"
         exclude("org.lz4", "lz4-java")
@@ -57,7 +57,7 @@ dependencies {
             because("Sikkerhetsoppdatering av transitiv avhengighet")
         }
         implementation("tools.jackson.core:jackson-core") {
-            version { require("3.2.4") }
+            version { require("3.3.0") }
             because("versjoner <= 3.2.0 har sårbarhet. inkludert i logstash-logback-encoder:9.0")
         }
         testImplementation("org.apache.commons:commons-lang3") {
